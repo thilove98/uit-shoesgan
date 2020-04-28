@@ -110,6 +110,7 @@ def home():
     latent = None
     if data is not None:
         latent = sample_latent[data]
+        latent = latent[0]
         latent = np.array([float(i) for i in latent])
     return render_template("index.html",
                         table = table,
