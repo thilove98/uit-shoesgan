@@ -1,3 +1,4 @@
+cd ~
 pip install ninja
 pip install torchvision==0.4.2
 pip install Pillow==6.0.0
