@@ -110,6 +110,8 @@ def home():
     latent = None
     if data is not None:
         latent = sample_latent[data][0]
+        return render_template("index.html",
+                        image="data:image/png;base64," + img2str(generate_image(latent)))
     return render_template("index.html",
                         table = table,
                         image="data:image/png;base64," + img2str(generate_image(latent)))
