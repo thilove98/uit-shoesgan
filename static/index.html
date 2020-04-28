@@ -17,6 +17,12 @@
 				text-align: center;
 				color: #a00707;
 			}
+			h1{
+				margin-left: 50px;
+			}
+			#sample {
+				margin-left: 50px;
+			}
 			.button {
 				
 				border: none;
@@ -121,8 +127,20 @@
 				<h3>Generated Image</h3>
 				<img src="{{ image }}" height="400px" width="400px" id="sample">
 			</div>
-			
 		</div>
+		<h2>Sample</h2>
+		{% for i in table %}
+			<h1>{{ i.type }}</h1>
+			<div id="container">			
+				{% for j in i.sample %}
+				<form id="sample">
+					<input type="hidden" name="sample_image" value="{{ j.name }}">
+					<input type="image" src="{{ j.image }}" alt="Submit" width="120" height="120">
+				</form>
+				{% endfor %}
+			</div>
+		{% endfor %}
+		
 		<script>
 			function random(min, max){
 				return Math.random() * (max - min) + min;
