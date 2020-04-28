@@ -24,7 +24,6 @@
 				margin-left: 50px;
 			}
 			.button {
-				
 				border: none;
 				padding: 10px 40px;
 				text-align: center;
@@ -133,10 +132,7 @@
 			<h1>{{ i.type }}</h1>
 			<div id="container">			
 				{% for j in i.sample %}
-				<form id="sample">
-					<input type="hidden" name="sample_image" value="{{ j.name }}">
-					<input type="image" src="{{ j.image }}" alt="Submit" width="120" height="120">
-				</form>
+					<button id="sample" name="{{ j.name }}" onclick="sampleClick('{{ j.name }}')"><img src="{{ j.image }}"></button>
 				{% endfor %}
 			</div>
 		{% endfor %}
@@ -154,13 +150,26 @@
 					latent.push($("#slid_" + i.toString()).val())
 				}
 				$.ajax({
-					url : '/thitrum/submit_latent_vector',
+					url : '/submit_latent_vector',
 					type: 'POST',
 					success: function(data) {
 						document.getElementById("sample").src=data.image
 					},
 					data: {"latent": latent}
 				});
+			}
+			function sampleClick(name){
+				var t = (this.id); 
+				$.ajax({
+					url : '/submit_sample',
+					type: 'POST',
+					success: function(data) {
+						document.getElementById("sample").src=data.image
+					},
+					data: {"sample_name": name}
+				});
+				document.body.scrollTop = 0;
+  				document.documentElement.scrollTop = 0;
 			}
 			function btnRandomClick(){
 				let temp = getRandomInt(64000)

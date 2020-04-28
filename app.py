@@ -96,6 +96,7 @@ for img_type in img_path:
     img_name_path = os.listdir("images/" + img_type)
     for name in img_name_path:
         im = Image.open(os.path.join('images', img_type, name))
+        im = im.resize((90, 90))
         name = name.replace("_fake", "")
         name = name.replace(".png", "")
         img = "data:image/png;base64," + img2str(im)
@@ -104,7 +105,7 @@ for img_type in img_path:
    
 
 
-@app.route("/thitrum", methods=['POST', 'GET'])
+@app.route("/", methods=['POST', 'GET'])
 def home():
     data = request.args.get('sample_image')
     latent = None
@@ -114,13 +115,19 @@ def home():
                         table = table,
                         image="data:image/png;base64," + img2str(generate_image(latent)))
 
-@app.route("/thitrum/submit_latent_vector", methods=['POST'])
+@app.route("/submit_latent_vector", methods=['POST'])
 def changeImage():
     data = request.form.to_dict(flat=False)
     latent = data["latent[]"]
     latent = np.array([float(i) for i in latent])
     return {"image": "data:image/png;base64," + img2str(generate_image(latent))}
 
+@app.route("/submit_sample", methods=['POST'])
+def sample_request():
+    data = request.form.to_dict(flat=False)
+    print(data['sample_name'][0])
+    return {"image": "data:image/png;base64," + img2str(generate_image())}
+
 if __name__ == "__main__":
-    app.run(debug=True, port=9696)
+    app.run(debug=True, port=5000)
     #generate_image2()
