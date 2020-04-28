@@ -10,6 +10,7 @@ import torch
 import numpy as np
 from io import BytesIO
 from model import Generator
+import json
 
 app = Flask(__name__,
             static_url_path='/static',
@@ -83,12 +84,35 @@ def generate_image(indices=None, model=MODEL, device=DEVICE, NUMPY_ARRAY=NUMPY_A
     img = transforms.ToPILImage()(sample[0].clamp_(-1, 1).add_(1).div_(2 + 1e-5)).convert('RGB')
     return img
 
+with open('latents.json') as json_file:
+    sample_latent = json.load(json_file)
+
+table = []
+img_path = os.listdir("images")
+for img_type in img_path:
+    a = dict()
+    a['type'] = img_type
+    a['sample'] = []
+    img_name_path = os.listdir("images/" + img_type)
+    for name in img_name_path:
+        im = Image.open(os.path.join('images', img_type, name))
+        name = name.replace("_fake", "")
+        name = name.replace(".png", "")
+        img = "data:image/png;base64," + img2str(im)
+        a['sample'].append({"image": img, "name": name})
+    table.append(a)
+   
 
 
 @app.route("/thitrum", methods=['POST', 'GET'])
 def home():
+    data = request.args.get('sample_image')
+    latent = None
+    if data is not None:
+        latent = sample_latent[data]
     return render_template("index.html",
-                        image="data:image/png;base64," + img2str(generate_image()))
+                        table = table,
+                        image="data:image/png;base64," + img2str(generate_image(latent)))
 
 @app.route("/thitrum/submit_latent_vector", methods=['POST'])
 def changeImage():
