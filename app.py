@@ -109,9 +109,7 @@ def home():
     data = request.args.get('sample_image')
     latent = None
     if data is not None:
-        latent = sample_latent[data]
-        latent = latent[0]
-        latent = np.array([float(i) for i in latent])
+        latent = sample_latent[data][0]
     return render_template("index.html",
                         table = table,
                         image="data:image/png;base64," + img2str(generate_image(latent)))
