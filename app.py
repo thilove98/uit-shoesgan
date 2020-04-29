@@ -130,7 +130,7 @@ def sample_request():
     name = data['sample_name'][0]
     index = sample_latent[name]
     indices = [index, index, index]
-    return {"image": "data:image/png;base64," + img2str(generate_image(indices))}
+    return {"image": "data:image/png;base64," + img2str(generate_image(indices)), "index": index}
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
