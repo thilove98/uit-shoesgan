@@ -63,11 +63,13 @@ def generate_image(latent=None, model=MODEL, device=DEVICE):
     img = transforms.ToPILImage()(sample[0].clamp_(-1, 1).add_(1).div_(2 + 1e-5)).convert('RGB')
     return img
 """
+
 NUMPY_ARRAY = np.array(pickle.load(open(LATENT_SORTED, 'rb')))
 
 Z = 8
-Y = 0
+Y = 4
 X = 16 - Y - Z
+
 def generate_image(indices=None, model=MODEL, device=DEVICE, NUMPY_ARRAY=NUMPY_ARRAY):
     if indices is None:
         #indice = np.random.randint(low=0, high=64000)
@@ -102,7 +104,7 @@ for img_type in img_path:
         img = "data:image/png;base64," + img2str(im)
         a['sample'].append({"image": img, "name": name})
     table.append(a)
-   
+
 
 
 @app.route("/", methods=['POST', 'GET'])
@@ -125,8 +127,10 @@ def changeImage():
 @app.route("/submit_sample", methods=['POST'])
 def sample_request():
     data = request.form.to_dict(flat=False)
-    print(data['sample_name'][0])
-    return {"image": "data:image/png;base64," + img2str(generate_image())}
+    name = data['sample_name'][0]
+    index = sample_latent[name]
+    indices = [index, index, index]
+    return {"image": "data:image/png;base64," + img2str(generate_image(indices))}
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

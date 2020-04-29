@@ -64,8 +64,10 @@ def changeImage():
 @app.route("/submit_sample", methods=['POST'])
 def sample_request():
     data = request.form.to_dict(flat=False)
-    print(data['sample_name'][0])
-    return {"image": "data:image/png;base64," + img2str(generate_image())}
+    name = data['sample_name'][0]
+    index = sample_latent[name]
+    indices = [index, index, index]
+    return {"image": "data:image/png;base64," + img2str(generate_image(indices))}
 
 if __name__ == "__main__":
     app.run(debug=True)
