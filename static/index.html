@@ -170,6 +170,12 @@
 				});
 				document.body.scrollTop = 0;
   				document.documentElement.scrollTop = 0;
+				const LATENT_SIZE = 3
+				let tag = document.getElementById("latent_sliders")
+				for (let i =0;i<LATENT_SIZE; i++){
+					slid = "slid_" + i.toString()
+					document.getElementById(slid).value = parseInt("{{ index }}");
+				}
 			}
 			function btnRandomClick(){
 				let temp = getRandomInt(64000)
