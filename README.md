@@ -17,3 +17,5 @@ We have trained the 512px model on our datasets (with the left-view) 420k iterat
 <https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq>
 
 
+### Demo
+![](shoes-demo.gif)
