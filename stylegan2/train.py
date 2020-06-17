@@ -328,7 +328,7 @@ if __name__ == '__main__':
     parser.add_argument('--channel_multiplier', type=int, default=2)
     parser.add_argument('--wandb', action='store_true')
     parser.add_argument('--local_rank', type=int, default=0)
-    parser.add_argument('--mirror-augment', type=int, default=1)
+    parser.add_argument('--mirror_augment', type=int, default=1)
 
     args = parser.parse_args()
 
