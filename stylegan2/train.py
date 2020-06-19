@@ -307,7 +307,7 @@ if __name__ == '__main__':
 
     parser.add_argument('path', type=str)
     parser.add_argument('--ckpt_dir', type=str, default='/content/drive/My Drive/stylegan2/checkpoint')
-    parser.add_argument('--sample_dir', type=str, default='sample')
+    parser.add_argument('--sample_dir', type=str, default='/content/drive/My Drive/stylegan2/sample')
     parser.add_argument('--save_every', type=int, default=5000)
     parser.add_argument('--stop_after', type=int, default=800000)
     parser.add_argument('--show_pbar', type=int, default=1)
