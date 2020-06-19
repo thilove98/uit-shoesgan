@@ -15,9 +15,9 @@ LEVEL3 = 8
 
 def load_model(model_path='model.pt'):
     # download model
-    if not os.path.exists(MODEL_PATH):
+    if not os.path.exists(model_path):
         url_model = 'https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq'
-        gdown.download(url_model, output=MODEL_PATH, quiet=False)
+        gdown.download(url_model, output=model_path, quiet=False)
 
     # load checkpoint
     checkpoint = torch.load(model_path, map_location=lambda storage, loc: storage)
