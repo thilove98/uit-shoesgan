@@ -1,10 +1,12 @@
+import os
+import random
 import gdown
 import torch
 import numpy as np
 from torchvision import transforms, utils
 from model import Generator
 
-
+SEED = 2020
 DEVICE = 'cuda'
 RESOLUTION = 512
 LATENT_SIZE = 128
@@ -12,6 +14,16 @@ LATENT_SIZE = 128
 LEVEL1 = 4
 LEVEL2 = 4
 LEVEL3 = 8
+
+def seed_everything(seed):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+
+seed_everything(SEED)
 
 def load_model(model_path='model.pt'):
     # download model
@@ -49,3 +61,28 @@ def style_to_image(style1, style2, style3, model=MODEL):
 
     return img
 
+@torch.no_grad()
+def gen_images(batch, model=MODEL):
+    random_latents = torch.randn(batch, LATENT_SIZE).to(DEVICE)
+    samples, latents = model([random_latents], return_latents=True)
+    samples = samples.cpu()
+    latents = latents.cpu()
+    return samples, latents
+
+def get_random_images(n_samples, size, batch_size=16, model=MODEL):
+    batches = [batch_size] * (n_samples//batch_size) + [n_samples%batch_size]
+    results = []
+    index = 0
+    for batch in batches:
+        if batch == 0:
+            continue
+        samples, latents = gen_images(batch, model)
+        for sample, latent in zip(samples, latents):
+            img = transforms.ToPILImage()(sample.clamp_(-1, 1).add_(1).div_(2 + 1e-5))            
+            img = img.convert('RGB').resize(size)            
+            style = latent[0].numpy()
+
+            item = [img, style, str(index)]           
+            results.append(item)
+            index += 1
+    return results
