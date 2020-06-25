@@ -82,7 +82,7 @@ def get_random_images(n_samples, size, batch_size=16, model=MODEL):
             img = img.convert('RGB').resize(size)            
             style = latent[0].numpy()
 
-            item = [img, style, index]           
+            item = [img, style, str(index)]           
             results.append(item)
             index += 1
     return results
