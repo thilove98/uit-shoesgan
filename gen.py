@@ -69,32 +69,20 @@ def gen_images(batch, model=MODEL):
     latents = latents.cpu()
     return samples, latents
 
-def get_random_images(n_samples, size, batch_size=16, model=MODEL, convert_to_json=True):
+def get_random_images(n_samples, size, batch_size=16, model=MODEL):
     batches = [batch_size] * (n_samples//batch_size) + [n_samples%batch_size]
-    
-    results = {}
+    results = []
     index = 0
-
     for batch in batches:
         if batch == 0:
             continue
         samples, latents = gen_images(batch, model)
         for sample, latent in zip(samples, latents):
-            img = transforms.ToPILImage()(sample.clamp_(-1, 1).add_(1).div_(2 + 1e-5))
-            img = img.convert('RGB').resize(size)
-            style = latent[0]
+            img = transforms.ToPILImage()(sample.clamp_(-1, 1).add_(1).div_(2 + 1e-5))            
+            img = img.convert('RGB').resize(size)            
+            style = latent[0].numpy()
 
-            if convert_to_json:
-                results[index] = {
-                    'image': np.array(img).astype(np.uint8).tolist(),
-                    'style': np.array(style).tolist(),
-                    }
-             
-            else:
-                results[index] = {
-                    'image': img,
-                    'style': style,
-                    }
+            item = [img, style, index]           
+            results.append(item)
             index += 1
-
     return results
