@@ -8,17 +8,15 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
     <script src="static/scripts.js"></script>
 </head>
-<body>
+<body id="body">
     <img id="banner" src="https://www.uit.edu.vn/sites/vi/files/banner.png" alt="Banner">
     <h2>GENERATING SHOES DESIGNS USING GENERATIVE ADVERSARIAL NETWORKS</h2>
     <p id="xPos">x</p>
     <p id="yPos">y</p>
+    <p id="rl">release</p>
     <h3 style="color:blue; margin-left:20px; padding-top:20px">Drap and drop shoes</h3>
     <div style="display: flex; margin-left:20px">
-        <canvas id="pro-canvas" 
-                width="1200" 
-                height="400" 
-                style="border:4px solid #000000; background-color: gold">
+        <canvas id="pro-canvas" >
         </canvas>
             <script>
                 canvas_load('{{ images }}')
