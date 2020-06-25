@@ -1,192 +1,56 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="X-UA-Compatible" content="ie-edge">
-		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-		<link rel="shortcut icon" href="https://tuyensinh.uit.edu.vn/favicon.ico" type="image/x-icon">
-        <title> UIT Shoes Generator </title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
-		<style>
-			#banner{
-				margin-left: 50px;
-				height: 100px;
-			}
-			h2{
-				text-align: center;
-				color: #a00707;
-			}
-			h1{
-				margin-left: 50px;
-			}
-			#sample {
-				margin-left: 50px;
-			}
-			.button {
-				border: none;
-				padding: 10px 40px;
-				text-align: center;
-				align-items: center;
-				display: inline-block;
-				font-size: 18px;
-				margin-top: 20px;
-				transition-duration: 0.4s;
-				cursor: pointer;
-				background-color: rgb(255, 255, 255);
-				color: black;
-				border: 2px solid #555555;
-			}
-			.button:hover {
-				background-color: #555555;
-				color: rgb(255, 255, 255);
-			}
-			body {
-				font-family: sans-serif;
-			}
-			#container {
-				display: flex;
-			}
-			#left {
-				width: 70%;
-				margin-left: 50px;
-			}
-			#right {
-				width: 50%;
-			}
-			.slider {
-				-webkit-appearance: none;
-				width: 85%;
-				height: 8px;
-				border-radius: 5px;
-				background: #c0c0c0;
-				outline: none;
-				opacity: 0.7;
-				-webkit-transition: .2s;
-				transition: opacity .2s;
-				margin-right: 10px;
-				margin-bottom: 7px;
-			}
-
-			.slider:hover {
-				opacity: 1;
-			}
-
-			.slider::-webkit-slider-thumb {
-				-webkit-appearance: none;
-				appearance: none;
-				width: 20px;
-				height: 20px;
-				border-radius: 50%;
-				background: rgb(44, 107, 243);
-				cursor: pointer;
-			}
-
-			.slider::-moz-range-thumb {
-				width: 20px;
-				height: 20px;
-				border-radius: 50%;
-				background: rgb(40, 120, 250);
-				cursor: pointer;
-			}
-		</style>
-		<script>
-			const LATENT_SIZE = 3
-			$(document).ready(function() {
-				let tag = document.getElementById("latent_sliders")
-				for (let i =0;i<LATENT_SIZE; i++){
-					let slid = document.createElement("input")
-					slid.id = "slid_" + i.toString()
-					slid.type = "range"
-					slid.min = 0
-					slid.max = 64000 - 1
-					slid.step = 1
-					slid.value = 0
-					tag.appendChild(slid)
-					document.getElementById(slid.id).className = 'slider';
-				}
-			})
-		</script>
-    </head>
-    <body>
-		<img id="banner" src="https://www.uit.edu.vn/sites/vi/files/banner.png" alt="Banner">
-		<h2>GENERATING SHOES DESIGN USING GENERATIVE ADVERSARIAL NETWORKS</h1>
-        <div id="container">
-            <div id="left">
-				<div id ="container">
-					<h3>Style Input</h3>
-					
-				</div>
-				
-				<form method="post", id="latent_sliders">
-				</form>
-				<button class="button" onclick="btnRandomClick()">Random</button>
+<head>
+    <meta charset="UTF-8">
+    <title> UIT Shoes Generator </title>
+    <link rel="shortcut icon" href="https://tuyensinh.uit.edu.vn/favicon.ico" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
+    <script src="static/scripts.js"></script>
+</head>
+<body>
+    <img id="banner" src="https://www.uit.edu.vn/sites/vi/files/banner.png" alt="Banner">
+    <h2>GENERATING SHOES DESIGNS USING GENERATIVE ADVERSARIAL NETWORKS</h2>
+    <h3 style="color:blue; margin-left:20px; padding-top:20px">Slect styles: Shape, Detail, and Color</h3>
+    <div style="display: flex; margin-left:20px">
+        <div style="border:dashed; display:flex; background-color:gold">
+            {% for i in table %}
+            <div style="margin-left:15px; padding-right:17px">
+                <h3>{{ i.type }}</h3>
+                <div>
+                    {% for j in i.sample %}
+                    <div id="{{ j.name }}"
+                         name="{{ j.name }}"
+                         style="margin-bottom:15px; background-color:#ffffff; border:solid; border-color:white"
+                         onclick="sampleClick('{{ j.name }}', {{ i }}, '{{ j.image }}')"
+                         href="#">
+                        <img src="{{ j.image }}">
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div id="right">
-				<h3>Generated Image</h3>
-				<img src="{{ image }}" height="400px" width="400px" id="sample">
-			</div>
-		</div>
-		<h2>Sample</h2>
-		{% for i in table %}
-			<h1>{{ i.type }}</h1>
-			<div id="container">			
-				{% for j in i.sample %}
-					<button id="sample" name="{{ j.name }}" onclick="sampleClick('{{ j.name }}')"><img src="{{ j.image }}"></button>
-				{% endfor %}
-			</div>
-		{% endfor %}
-		
-		<script>
-			function random(min, max){
-				return Math.random() * (max - min) + min;
-			}
-			function getRandomInt(max) {
-				return Math.floor(Math.random() * Math.floor(max));
-			}
-			function submit(){
-				var latent = []
-				for (let i=0;i<LATENT_SIZE;i++){
-					latent.push($("#slid_" + i.toString()).val())
-				}
-				$.ajax({
-					url : '/submit_latent_vector',
-					type: 'POST',
-					success: function(data) {
-						document.getElementById("sample").src=data.image
-					},
-					data: {"latent": latent}
-				});
-			}
-			function sampleClick(name){
-				var t = (this.id); 
-				$.ajax({
-					url : '/submit_sample',
-					type: 'POST',
-					success: function(data) {
-						document.getElementById("sample").src=data.image
-						const LATENT_SIZE = 3
-						let tag = document.getElementById("latent_sliders")
-						for (let i =0;i<LATENT_SIZE; i++){
-							slid = "slid_" + i.toString()
-							document.getElementById(slid).value = data.index;
-						}
-					},
-					data: {"sample_name": name}
-				});
-				document.body.scrollTop = 0;
-  				document.documentElement.scrollTop = 0;
-			}
-			function btnRandomClick(){
-				let temp = getRandomInt(64000)
-				for(let i=0; i<LATENT_SIZE; i++){
-					$("#slid_" + i.toString()).val(temp);
-				}
-				submit()
-			}
-			$("form").on("change", function (event) {
-				submit()
-			});
-		</script>
-    </body>
+            {% endfor %}
+        </div>
+        
+        <div>
+            <h3 style="margin-left:290px">Input style</h3>
+            <div style="padding-left: 300px; width:80px; margin-bottom:100px">
+                <img style="margin-top: 0px" id="inputShape" src="{{ image }}" height="69px" width="69px" id="sample">
+                <img style="margin-top: 15px" id="inputDetail" src="{{ image }}" height="69px" width="69px" id="sample">
+                <img style="margin-top: 15px" id="inputColor" src="{{ image }}" height="69px" width="69px" id="sample">
+            </div>
+        </div>
+        
+        <div style="margin-left:10%;">
+            <h3 style="margin-left:170px">Output</h3>
+            <img id="main-image" src="{{ image }}" height="400px" width="400px" id="sample">
+        </div>
+    </div>
+
+
+
+    <form method="post" , id="latent_sliders">
+    </form>
+    <button class="button" onclick="btnRandomClick()">Random</button>
+</body>
 </html>

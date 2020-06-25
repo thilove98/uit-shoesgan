@@ -1,12 +1,9 @@
 import os
 import random
 import pickle
-import gdown
 from PIL import Image
 from flask import Flask, Markup, request, render_template, url_for, jsonify
 import base64
-
-import numpy as np
 from io import BytesIO
 import json
 
@@ -74,4 +71,3 @@ def sample_request():
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
-    #generate_image2()

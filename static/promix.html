@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Style mixing </title>
+    <link rel="shortcut icon" href="https://tuyensinh.uit.edu.vn/favicon.ico" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
+    <script src="static/scripts.js"></script>
+</head>
+<body>
+    <img id="banner" src="https://www.uit.edu.vn/sites/vi/files/banner.png" alt="Banner">
+    <h2>GENERATING SHOES DESIGNS USING GENERATIVE ADVERSARIAL NETWORKS</h2>
+    <p id="xPos">x</p>
+    <p id="yPos">y</p>
+    <h3 style="color:blue; margin-left:20px; padding-top:20px">Drap and drop shoes</h3>
+    <div style="display: flex; margin-left:20px">
+        <canvas id="pro-canvas" 
+                width="1200" 
+                height="400" 
+                style="border:4px solid #000000; background-color: gold">
+        </canvas>
+            <script>
+                canvas_load('{{ images }}')
+            </script>
+    </div>
+</body>
+</html>

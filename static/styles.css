@@ -1,0 +1,29 @@
+#pro-canvas {
+    background-color: gold;
+    border:solid;
+    width: 1200px;
+    height: 400px;
+}
+
+#banner {
+    margin-left: 30px;
+    height: 130px;
+}
+
+h2 {
+    text-align: center;
+    color: #a00707;
+}
+
+h1 {
+    margin-left: 50px;
+}
+
+h3 {
+    margin-left: 10px;
+}
+
+body {
+    background-image: linear-gradient(pink, white);
+    font-family: sans-serif;
+}
