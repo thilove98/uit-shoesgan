@@ -9,18 +9,15 @@
     <script src="static/scripts.js"></script>
 </head>
 <body id="body">
-    <img id="banner" src="https://www.uit.edu.vn/sites/vi/files/banner.png" alt="Banner">
-    <h2>GENERATING SHOES DESIGNS USING GENERATIVE ADVERSARIAL NETWORKS</h2>
-    <p id="xPos">x</p>
-    <p id="yPos">y</p>
-    <p id="rl">release</p>
-    <h3 style="color:blue; margin-left:20px; padding-top:20px">Drap and drop shoes</h3>
+    <h2>MULTIPLE STYLES MIXING</h2>
+    <div style="display: flex; margin-left: 10px;margin-bottom: 5px;">       
+        <a id="myButton" onclick="btnRandomClick()" class="myButton">Random</a>
+    </div>
+
     <div style="display: flex; margin-left:20px">
         <canvas id="pro-canvas" >
         </canvas>
-            <script>
-                canvas_load('{{ images }}')
-            </script>
+        <script>canvas_load()</script>
     </div>
 </body>
 </html>

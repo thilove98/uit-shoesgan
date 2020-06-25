@@ -12,29 +12,33 @@ import struct
 import io
 import string
 
-
 app = Flask(__name__, template_folder='static')
-
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-
-
 
 def img2str(img):
     rawBytes = BytesIO()
     img.save(rawBytes, "PNG")
-    rawBytes.seek(0)  
+    rawBytes.seek(0)  # return to the start of the file
     return base64.b64encode(rawBytes.read()).decode('utf-8')
 
 def id_generator(size=10, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
-
 
 with open('latents.json') as json_file:
     sample_latent = json.load(json_file)
 
 table = []
 img_path = ["Shape", "Detail", "Color"]
-imgs = get_random_images(35, 70)
+imgs = get_random_images(25, (70, 70))
+
+@app.route("/get_image_by_vector", methods=['POST'])
+def vector_request():
+    data = request.form.to_dict(flat=False)
+    vector = data["name[]"]
+    vector = np.array([float(i) for i in vector])
+    image = "data:image/jpeg;base64," + img2str(style_to_image(vector, vector, vector))
+    return {"image": image}
+    
 
 for img_type in img_path:
     a = dict()
@@ -50,6 +54,18 @@ for img_type in img_path:
         a['sample'].append({"image": img, "name": name})
     table.append(a)
 
+@app.route("/get_random_images", methods=['POST'])
+def getranimg():
+    global imgs
+    imgs = get_random_images(35, (70, 70))
+    data = request.form.to_dict(flat=False)
+    images = []
+    vectors = []
+    for img, vector, index in imgs:
+        images.append(index)
+        vectors.append(vector)
+    return {"images": images, "vectors": vectors}
+
 @app.route('/promix/get_image/<name>')
 def get_image(name):
     img = style_to_image()
@@ -64,10 +80,7 @@ def get_image(name):
 
 @app.route("/promix", methods=['POST', 'GET'])
 def promix():
-    s = ''
-    for i in imgs:
-        s = s + i[2] + " "
-    return render_template("promix.html", images = s)
+    return render_template("promix.html")
 
 @app.route("/", methods=['POST', 'GET'])
 def home():

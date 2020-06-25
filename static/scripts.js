@@ -1,3 +1,9 @@
+var ctx, canvas, body, rect
+var margin = 5, w = 7, h = 5, size = 80, focus_id = -1, oldPos, h_input, w_input, margin_input, size_input, w_input_origin = 3
+var imgs = [], imgs_input = []
+var vectors = []
+var vts = []
+var img_res = new Image()
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
@@ -5,11 +11,6 @@ function getMousePos(canvas, evt) {
       y: evt.clientY - rect.top
     };
 }
-
-var ctx, canvas
-var margin = 5, w = 7, h = 5, size = 80, focus_id = -1, oldPos, h_input, w_input, margin_input, size_input, w_input_origin = 3
-var imgs = [], imgs_input = []
-
 function drawLine(x1, y1, x2, y2){
 	ctx.beginPath();
 	ctx.lineWidth = 2
@@ -17,7 +18,6 @@ function drawLine(x1, y1, x2, y2){
 	ctx.lineTo(x2, y2);
 	ctx.stroke();
 }
-
 function getPosByIndex(i, input=false){
 	if (input){
 		return {
@@ -30,14 +30,12 @@ function getPosByIndex(i, input=false){
 		"y": Math.floor(i/w)*size + margin
 	}
 }
-
 function getIndexByPos(p, input=false){
 	if (input){
-		return w_input*(Math.floor(p.y/size_input)) + Math.floor((p.x-w*size_input)/size_input)
+		return w_input*(Math.floor(p.y/size_input)) + Math.floor((p.x-w*size)/size_input)
 	}
 	return w*(Math.floor(p.y/size)) + Math.floor(p.x/size)
 }
-
 function drawAllImages(){
 	for( let i=0;i<imgs.length;i++)
 	{  
@@ -58,32 +56,48 @@ function drawAllImages(){
 		ctx.drawImage(imgs_input[i], imgPos.x, imgPos.y, size_input-margin_input*2, size_input-margin_input*2);
 		ctx.stroke();
 	}
+	ctx.drawImage(img_res, (w+w_input_origin)*size, 0, h*size, h*size)
 	drawLine(w*size, 0, w*size, h*size)
+	drawLine(w*size + w_input_origin*size, 0, w*size + w_input_origin*size, h*size)
 	//drawLine(800, 0, 800, 200)
 	//drawLine(600, 0, 600, 200)
 }
-
-async function canvas_load(images){
-	console.log(document.URL)
+async function get_random_images(){
+	drawLine(w*size, 0, w*size, h*size)
+	drawLine(w*size + w_input_origin*size, 0, w*size + w_input_origin*size, h*size)
+	$.ajax({
+		url: '/get_random_images',
+		type: 'POST',
+		success: function (data) {
+			images = data.images
+			vectors = data.vectors
+			for(let i=0;i<images.length;i++) images[i] = document.URL+"/get_image/"+ images[i]
+			for (let i=0;i<images.length;i++){
+				var img = new Image()
+				img.src = images[i]
+				img.onload = function(){
+					drawAllImages()
+				}
+				imgs.push(img)
+			}
+		},
+		data: { }
+	});	
+}
+function init(){
 	canvas = document.getElementById("pro-canvas")
 	body = document.getElementById("body")
 	canvas.style.border = "2px solid"
 	canvas.style.backgroundColor = "gold"
 	rect = canvas.getBoundingClientRect();
 	ctx = canvas.getContext("2d")
-	ctx.canvas.width  = size * w + size * w_input_origin;
+	ctx.canvas.width  = size * w + size * w_input_origin + size*h;
 	ctx.canvas.height = size * h; 
-	images = images.split(' ')
-	for(let i=0;i<images.length-1;i++) images[i] = document.URL+"/get_image/"+images[i]
-	//for	(let i of images)console.log(i)
-	for (let i=0;i<=images.length-1;i++){
-		var img = new Image()
-		img.src = images[i]
-		img.onload = function(){
-			drawAllImages()
-		}
-		imgs.push(img)
-	}
+}
+
+async function canvas_load(){
+	init()
+	await get_random_images()
 	body.addEventListener('mouseup', function(evt){
 		focus_id = -1
 		ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -91,35 +105,49 @@ async function canvas_load(images){
 	})
 	canvas.addEventListener('mouseup', function(evt){
 		let p = getMousePos(canvas, evt)
-		if (p.x>w*size && focus_id != -1){
+		if(p.x<w*size&&p.x<(w+w_input_origin)*size)
+			document.getElementById("pro-canvas").style.cursor = "grab";
+		if (p.x>w*size && focus_id != -1 &&p.x<(w+w_input_origin)*size){
 			var img = new Image()
 			img.src = images[focus_id]
 			img.onload = function(){
 				drawAllImages()
 			}
 			imgs_input.push(img)
+			vts.push(vectors[focus_id])
+			submitStyles()
 		}
 		focus_id = -1
 		drawAllImages()
 	})
-	canvas.addEventListener('mousemove', function(evt){
-		let x = document.getElementById("xPos")
-		let y = document.getElementById("yPos")
-		let p = getMousePos(canvas, evt)
-		x.innerHTML = p.x
-		y.innerHTML = p.y
-	})
 	canvas.addEventListener('mousedown', function(evt){
 		let p = getMousePos(canvas, evt)
-		if (p.x>w*size) return
-		let rl = document.getElementById("rl")
-		var id = getIndexByPos(p)
-		focus_id = id
-		rl.innerHTML = focus_id
+		if (p.x>w*size && p.x<(w+w_input_origin)*size) {
+			index = getIndexByPos(p, true)
+			imgs_input.splice(index, 1)
+			vts.splice(index, 1)
+			ctx.clearRect(0, 0, canvas.width, canvas.height)
+			drawAllImages()
+			if(imgs_input.length>0) submitStyles()
+			focus_id = -1
+			return
+		}
+		if (p.x<w*size)
+		document.getElementById("pro-canvas").style.cursor = "grabbing";
+		focus_id = getIndexByPos(p)
 		oldPos = p
 	})
 	canvas.addEventListener('mousemove', function(evt){
+		temp = getMousePos(canvas, evt)
+		if(temp.x>w*size){
+			document.getElementById("pro-canvas").style.cursor = "default";
+			index = getIndexByPos(temp, true)
+			if(index<imgs_input.length && temp.x<(w+w_input_origin)*size)
+				document.getElementById("pro-canvas").style.cursor = "not-allowed";
+		}else 
+		if (focus_id==-1)document.getElementById("pro-canvas").style.cursor = "grab";
 		if (focus_id == -1 || oldPos.x > w*size) return 
+		
 		img_pos = getPosByIndex(focus_id)
 		ctx.clearRect(0, 0, canvas.width, canvas.height)
 		drawAllImages()
@@ -134,48 +162,28 @@ async function canvas_load(images){
 	})
 }
 
-function submit() {
-	var latent = []
-	for (let i = 0; i < LATENT_SIZE; i++) {
-		latent.push($("#slid_" + i.toString()).val())
+async function submitStyles(){
+	ans = []
+	//console.log(vts)
+	for(let i=0; i<vts[0].length;i++){
+		sum = 0
+		for(let j =0;j<vts.length;j++){
+			sum = sum + vts[j][i]
+		}
+		ans.push(sum/vts.length)
 	}
 	$.ajax({
-		url: '/submit_latent_vector',
+		url: '/get_image_by_vector',
 		type: 'POST',
 		success: function (data) {
-			document.getElementById("sample").src = data.image
+			img_res.src = data.image
+			img_res.onload = function(){drawAllImages()}
 		},
-		data: { "latent": latent }
-	});
-}
-function sampleClick(name, type, image_link) {
-	var t = (this.id);
-	for (let i in type.sample) {
-		item_name = type.sample[i].name
-		if (item_name == name) document.getElementById(name).style.borderColor = "blue";
-		else document.getElementById(item_name).style.borderColor = "white";
-	}
-
-	console.log("input" + type.type)
-	document.getElementById("input" + type.type).src = image_link;
-
-	$.ajax({
-		url: '/submit_sample',
-		type: 'POST',
-		success: function (data) {
-			document.getElementById("main-image").src = data.image
-		},
-		data: { "sample_name": 1 }
+		data: {"name": ans}
 	});	
 }
-function btnRandomClick() {
-	//let temp = getRandomInt(64000)
-	//submit()
+
+async function btnRandomClick() {
+	ctx.clearRect(0, 0, canvas.width, canvas.height)
+	await get_random_images()
 }
-
-
-
-
-
-//document.body.scrollTop = 0;
-	//document.documentElement.scrollTop = 0;
