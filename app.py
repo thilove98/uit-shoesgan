@@ -63,12 +63,12 @@ def getranimg():
     vectors = []
     for img, vector, index in imgs:
         images.append(index)
+        vector = [float(i) for i in vector]
         vectors.append(vector)
     return {"images": images, "vectors": vectors}
 
 @app.route('/promix/get_image/<name>')
 def get_image(name):
-    img = style_to_image()
     for i in imgs:
         if i[2] == name:
             img = i[0]

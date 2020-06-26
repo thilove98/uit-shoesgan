@@ -71,6 +71,8 @@ async function get_random_images(){
 		success: function (data) {
 			images = data.images
 			vectors = data.vectors
+			imgs = []
+			
 			for(let i=0;i<images.length;i++) images[i] = document.URL+"/get_image/"+ images[i]
 			for (let i=0;i<images.length;i++){
 				var img = new Image()
