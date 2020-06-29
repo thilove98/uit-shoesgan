@@ -10,10 +10,7 @@ SEED = 2020
 DEVICE = 'cuda'
 RESOLUTION = 512
 LATENT_SIZE = 128
-
-LEVEL1 = 4
-LEVEL2 = 4
-LEVEL3 = 8
+LEVELS = [4, 4, 8]
 
 def seed_everything(seed):
     random.seed(seed)
@@ -43,19 +40,22 @@ MODEL = load_model()
 
 @torch.no_grad()
 def style_to_image(style1, style2, style3, model=MODEL):
-    style1 = np.array(style1).reshape(1, LATENT_SIZE)
-    style2 = np.array(style2).reshape(1, LATENT_SIZE)
-    style3 = np.array(style3).reshape(1, LATENT_SIZE)
+    styles = [style1, style2, style3]
+    for i, style in enumerate(styles):
+        if style is None:
+            random_latent = torch.randn(1, LATENT_SIZE).to(DEVICE)
+            style = model.style(random_latent)
+            style = style.cpu().numpy()
+            
+        style = np.array(style).reshape(1, LATENT_SIZE)
+        style = style.repeat(LEVELS[i], axis=0)
+        styles[i] = style
+    
+    styles = np.r_[styles[0], styles[1], styles[2]]
+    styles = torch.from_numpy(styles.astype(np.float32))
+    styles = styles.to(DEVICE)
 
-    style1 = style1.repeat(LEVEL1, axis=0)
-    style2 = style2.repeat(LEVEL2, axis=0)
-    style3 = style3.repeat(LEVEL3, axis=0)
-
-    style = np.r_[style1, style2, style3]
-    style = torch.from_numpy(style.astype(np.float32))
-    style = style.to(DEVICE)
-
-    sample, _ = model([style], input_is_latent=True)
+    sample, _ = model([styles], input_is_latent=True)
     sample = sample.cpu()
     img = transforms.ToPILImage()(sample[0].clamp_(-1, 1).add_(1).div_(2 + 1e-5)).convert('RGB')
 
