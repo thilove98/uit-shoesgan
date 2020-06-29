@@ -119,7 +119,12 @@ async function get_random_images(){
 	});	
 }
 function init(){
-	canvas = document.getElementById("pro-canvas")
+	canvas = document.getElementById("pro-canvas");
+	resCanvas = document.getElementById("res-canvas");
+	res_ctx = resCanvas.getContext("2d");
+	res_ctx.canvas.width = 512;
+	res_ctx.canvas.height = 512
+
 	body = document.getElementById("body")
 	//canvas.style.border = "2px solid"
 	//canvas.style.backgroundColor = "gold"
