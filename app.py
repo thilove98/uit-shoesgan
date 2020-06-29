@@ -34,9 +34,22 @@ imgs = get_random_images(25, (70, 70))
 @app.route("/get_image_by_vector", methods=['POST'])
 def vector_request():
     data = request.form.to_dict(flat=False)
-    vector = data["name[]"]
-    vector = np.array([float(i) for i in vector])
-    image = "data:image/jpeg;base64," + img2str(style_to_image(vector, vector, vector))
+    try:
+        shape = data["nums[0][]"]
+    except:
+        shape = []
+    try:
+        detail = data["nums[1][]"]
+    except:
+        detail = []
+    try:
+        color = data["nums[2][]"]
+    except:
+        color = []
+    shape = np.array([float(i) for i in shape])
+    detail = np.array([float(i) for i in detail])
+    color = np.array([float(i) for i in color])
+    image = "data:image/jpeg;base64," + img2str(style_to_image(shape, detail, color))
     return {"image": image}
     
 
@@ -57,7 +70,11 @@ for img_type in img_path:
 @app.route("/get_random_images", methods=['POST'])
 def getranimg():
     global imgs
-    imgs = get_random_images(35, (70, 70))
+    data = request.form.to_dict(flat=False)
+    print(data)
+    nums = int(data["nums"][0])
+    size = int(data["size"][0])
+    imgs = get_random_images(nums, (size, size))
     data = request.form.to_dict(flat=False)
     images = []
     vectors = []
@@ -80,7 +97,7 @@ def get_image(name):
 
 @app.route("/promix", methods=['POST', 'GET'])
 def promix():
-    return render_template("promix.html")
+    return render_template("final.html")
 
 @app.route("/", methods=['POST', 'GET'])
 def home():
@@ -92,21 +109,7 @@ def home():
                         table = table,
                         image="127.0.0.1:5000" + '/get_image/' + id_generator() )
 
-@app.route("/submit_latent_vector", methods=['POST'])
-def changeImage():
-    data = request.form.to_dict(flat=False)
-    #latent = data["latent[]"]
-    #latent = np.array([float(i) for i in latent])
-    return {"image": "data:image/png;base64," + img2str(style_to_image())}
-
-@app.route("/submit_sample", methods=['POST'])
-def sample_request():
-    return {"image": "data:image/png;base64," + img2str(style_to_image((255, 0, 0))) } 
-    data = request.form.to_dict(flat=False)
-    name = data['sample_name'][0]
-    index = sample_latent[name]
-    indices = [index, index, index]
-    
+  
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
