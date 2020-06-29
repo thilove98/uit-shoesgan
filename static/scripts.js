@@ -220,6 +220,6 @@ async function drawResult(image){
 	img.src = image
 	img.onload = function(){
 		let context = cvas.getContext("2d")
-		context.drawImage(img, 0, 0, 512, 512)
+		context.drawImage(img, 0, 0, cvas.width, cvas.height)
 	}	
 }
