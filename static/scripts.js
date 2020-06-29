@@ -1,5 +1,5 @@
 var ctx, canvas, body, rect
-var margin = 0, w = 4, h = 3, size = 100, focus_id = -1, oldPos, h_input, w_input, margin_input, size_input, w_input_origin = 3
+var margin = 4, w = 4, h = 3, size = 100, focus_id = -1, oldPos, h_input, w_input, margin_input, size_input, w_input_origin = 3
 var distanc = 50
 var imgs = [], imgs_input = [[], [], []], id_input = [[], [], []]
 var vectors = []
