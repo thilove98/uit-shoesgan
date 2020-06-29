@@ -223,7 +223,6 @@ async function drawResult(image){
 	let cvas = document.getElementById("res-canvas")
 	let img = new Image()
 	img.src = image
-	console.log(image)
 	img.onload = function(){
 		let context = cvas.getContext("2d")
 		context.drawImage(img, 0, 0, cvas.width, cvas.height)
