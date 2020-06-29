@@ -42,10 +42,15 @@ MODEL = load_model()
 def style_to_image(style1, style2, style3, model=MODEL):
     styles = [style1, style2, style3]
     for i, style in enumerate(styles):
-        if style is None:
+<<<<<<< HEAD
+        if len(style)==0:
+=======
+        if len(style) == 0:
+>>>>>>> 86efe2499b4b1f42cf724beb223bb6779106492e
             random_latent = torch.randn(1, LATENT_SIZE).to(DEVICE)
             style = model.style(random_latent)
             style = style.cpu().numpy()
+            #rint(style.shape)
             
         style = np.array(style).reshape(1, LATENT_SIZE)
         style = style.repeat(LEVELS[i], axis=0)
