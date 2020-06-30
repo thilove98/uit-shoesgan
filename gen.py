@@ -41,19 +41,19 @@ MODEL = load_model()
 @torch.no_grad()
 def style_to_image(style1, style2, style3, model=MODEL):
     styles = [style1, style2, style3]
+
     for i, style in enumerate(styles):
         if len(style) == 0:
             random_latent = torch.randn(1, LATENT_SIZE).to(DEVICE)
-            style = model.style(random_latent)
+            style = model.get_latent(random_latent)
             style = style.cpu().numpy()
-            #rint(style.shape)
-            
         style = np.array(style).reshape(1, LATENT_SIZE)
         style = style.repeat(LEVELS[i], axis=0)
         styles[i] = style
-    
+
     styles = np.r_[styles[0], styles[1], styles[2]]
-    styles = torch.from_numpy(styles.astype(np.float32))
+    styles = torch.from_numpy(styles)
+    styles = styles.unsqueeze(0)
     styles = styles.to(DEVICE)
 
     sample, _ = model([styles], input_is_latent=True)
