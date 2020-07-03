@@ -247,7 +247,7 @@ def train(args, loader, generator, discriminator, g_optim, d_optim, g_ema, devic
             if not args.use_label:
                 fake_img, latents = generator(noise, return_latents=True)
             else:
-                label = torch.randint(0, generator.label_size, size=(args.batch,), device=device)
+                label = torch.randint(0, generator.label_size, size=(path_batch_size,), device=device)
                 fake_img, latents = generator(noise, labels=[label], return_latents=True)
 
             path_loss, mean_path_length, path_lengths = g_path_regularize(
