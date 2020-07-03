@@ -360,7 +360,30 @@ if __name__ == '__main__':
     parser.add_argument('--local_rank', type=int, default=0)
     parser.add_argument('--mirror_augment', type=int, default=1)
 
+    parser.add_argument('--use_label', type=int, default=0)
+    parser.add_argument('--embed_dim', type=int, default=64)
+
     args = parser.parse_args()
+
+    if args.use_label:
+        import requests
+        import json
+        # download metadata
+        url = 'https://raw.githubusercontent.com/thilove98/uit-shoesgan/master/dataset/dataset.json'
+        meta_data = requests.get(url)
+        metadata = json.loads(meta_data.text)
+        categories = []
+        for x in metadata.values():
+            xc = x['info']['category']
+            if xc not in categories:
+                categories.append(xc)
+        categories = sorted(categories)
+        n_categories = len(categories)
+        categories = {c : i for c, i in zip(categories, range(n_categories))}
+    else:
+        metadata = None
+        categories = None
+        n_categories = None
 
     n_gpu = int(os.environ['WORLD_SIZE']) if 'WORLD_SIZE' in os.environ else 1
     args.distributed = n_gpu > 1
@@ -383,7 +406,7 @@ if __name__ == '__main__':
     generator = Generator(
         args.size, args.latent, args.n_mlp, channel_multiplier=args.channel_multiplier,
         labels_in=args.use_label,
-        label_size=args.n_categories,
+        label_size=n_categories,
         shared_dim=args.embed_dim,
     ).to(device)
 
@@ -394,7 +417,7 @@ if __name__ == '__main__':
     g_ema = Generator(
         args.size, args.latent, args.n_mlp, channel_multiplier=args.channel_multiplier,
         labels_in=args.use_label,
-        label_size=args.n_categories,
+        label_size=n_categories,
         shared_dim=args.embed_dim,
     ).to(device)
 
@@ -465,7 +488,7 @@ if __name__ == '__main__':
             ]
         )
 
-    dataset = MultiResolutionDataset(args.path, transform, args.size)
+    dataset = MultiResolutionDataset(args.path, transform, args.size, args.use_label, metadata, categories)
     loader = data.DataLoader(
         dataset,
         batch_size=args.batch,
