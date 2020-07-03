@@ -158,17 +158,34 @@ def train(args, loader, generator, discriminator, g_optim, d_optim, g_ema, devic
 
             break
 
-        real_img = next(loader)
-        real_img = real_img.to(device)
+        if not args.use_label:
+            real_img = next(loader)
+            real_img = real_img.to(device)
+        else:
+            real_img, real_label = next(loader)
+            real_img = real_img.to(device)
+            real_label = real_label.to(device)
+
 
         requires_grad(generator, False)
         requires_grad(discriminator, True)
 
         noise = mixing_noise(args.batch, args.latent, args.mixing, device)
-        fake_img, _ = generator(noise)
-        fake_pred = discriminator(fake_img)
+        if args.use_label:
+            label = torch.randint(0, generator.label_size, size=(args.batch,), device=device)
 
-        real_pred = discriminator(real_img)
+        if not args.use_label:
+            fake_img, _ = generator(noise)
+            fake_pred = discriminator(fake_img)
+        else:
+            fake_img, _ = generator(noise, labels=[label])
+            fake_pred = discriminator(fake_img, label)
+
+        if not args.use_label:
+            real_pred = discriminator(real_img)        
+        else:
+            real_pred = discriminator(real_img, labels=[real_label])
+
         d_loss = d_logistic_loss(real_pred, fake_pred)
 
         loss_dict['d'] = d_loss
@@ -183,7 +200,12 @@ def train(args, loader, generator, discriminator, g_optim, d_optim, g_ema, devic
 
         if d_regularize:
             real_img.requires_grad = True
-            real_pred = discriminator(real_img)
+            
+            if not args.use_label:
+                real_pred = discriminator(real_img)
+            else:
+                real_pred = discriminator(real_img, labels=[real_label])
+
             r1_loss = d_r1_loss(real_pred, real_img)
 
             discriminator.zero_grad()
@@ -197,8 +219,16 @@ def train(args, loader, generator, discriminator, g_optim, d_optim, g_ema, devic
         requires_grad(discriminator, False)
 
         noise = mixing_noise(args.batch, args.latent, args.mixing, device)
-        fake_img, _ = generator(noise)
-        fake_pred = discriminator(fake_img)
+        if args.use_label:
+            label = torch.randint(0, generator.label_size, size=(args.batch,), device=device)
+        
+        if not args.use_label:
+            fake_img, _ = generator(noise)
+            fake_pred = discriminator(fake_img)
+        else:
+            fake_img, _ = generator(noise, labels=[label])
+            fake_pred = discriminator(fake_img, label)
+
         g_loss = g_nonsaturating_loss(fake_pred)
 
         loss_dict['g'] = g_loss
@@ -351,14 +381,23 @@ if __name__ == '__main__':
     args.start_iter = 0
 
     generator = Generator(
-        args.size, args.latent, args.n_mlp, channel_multiplier=args.channel_multiplier
+        args.size, args.latent, args.n_mlp, channel_multiplier=args.channel_multiplier,
+        labels_in=args.use_label,
+        label_size=args.n_categories,
+        shared_dim=args.embed_dim,
     ).to(device)
+
     discriminator = Discriminator(
-        args.size, args.latent, channel_multiplier=args.channel_multiplier
+        args.size, args.latent, channel_multiplier=args.channel_multiplier,
     ).to(device)
+
     g_ema = Generator(
-        args.size, args.latent, args.n_mlp, channel_multiplier=args.channel_multiplier
+        args.size, args.latent, args.n_mlp, channel_multiplier=args.channel_multiplier,
+        labels_in=args.use_label,
+        label_size=args.n_categories,
+        shared_dim=args.embed_dim,
     ).to(device)
+
     g_ema.eval()
     accumulate(g_ema, generator, 0)
 
