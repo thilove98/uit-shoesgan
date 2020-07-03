@@ -372,14 +372,28 @@ class Generator(nn.Module):
         channel_multiplier=2,
         blur_kernel=[1, 3, 3, 1],
         lr_mlp=0.01,
+
+        labels_in=False,
+        label_size=0,
+        shared_dim=0,
+
     ):
         super().__init__()
 
         self.size = size
 
-        self.style_dim = style_dim
+        
 
+        self.labels_in = labels_in
+        self.shared_dim = shared_dim if labels_in else 0
+        self.label_size = label_size if labels_in else 0
+        if labels_in:
+            self.embed = nn.Embedding(label_size, shared_dim)
+        
         layers = [PixelNorm()]
+
+        style_dim += self.shared_dim
+        self.style_dim = style_dim
 
         for i in range(n_mlp):
             layers.append(
@@ -395,11 +409,11 @@ class Generator(nn.Module):
             8: style_dim,
             16: style_dim,
             32: style_dim,
-            64: style_dim//2 * channel_multiplier,
-            128: style_dim//4 * channel_multiplier,
-            256: style_dim//8 * channel_multiplier,
-            512: style_dim//16 * channel_multiplier,
-            1024: style_dim//32 * channel_multiplier,
+            64: style_dim //2 * channel_multiplier,
+            128: style_dim //4 * channel_multiplier,
+            256: style_dim //8 * channel_multiplier,
+            512: style_dim //16 * channel_multiplier,
+            1024: style_dim //32 * channel_multiplier,
         }
 
         self.input = ConstantInput(self.channels[4])
@@ -468,7 +482,14 @@ class Generator(nn.Module):
 
         return latent
 
-    def get_latent(self, input):
+    def get_latent(self, input, label=None):
+        if label is None:
+            label = torch.randint(low=0,
+                                  high=self.label_size,
+                                  size=(input.shape[0],),
+                                  ).cuda()
+        label = self.embed(label)
+        input = torch.cat([input, label], 1)
         return self.style(input)
 
     def forward(
@@ -481,10 +502,30 @@ class Generator(nn.Module):
         input_is_latent=False,
         noise=None,
         randomize_noise=True,
+        labels=None,
     ):
-        if not input_is_latent:
-            styles = [self.style(s) for s in styles]
 
+        if not input_is_latent:
+            if self.labels_in:
+                if labels is None:
+                    labels = torch.randint(low=0,
+                                           high=self.label_size,
+                                           size=(1, styles[0].shape[0]),
+                    ).cuda()
+                
+                labels = [self.embed(label) for label in labels]
+                style_t = []
+                for s, z in zip(styles, labels):
+                    print(s.shape, z.shape)
+                    style_t.append(
+                        self.style(
+                            torch.cat([s, z], 1),
+                        )
+                    )
+                styles = style_t
+            else:
+                styles = [self.style(s) for s in styles]
+            
         if noise is None:
             if randomize_noise:
                 noise = [None] * self.num_layers
@@ -543,7 +584,6 @@ class Generator(nn.Module):
 
         else:
             return image, None
-
 
 class ConvLayer(nn.Sequential):
     def __init__(
@@ -616,7 +656,10 @@ class ResBlock(nn.Module):
 
 
 class Discriminator(nn.Module):
-    def __init__(self, size, style_dim, channel_multiplier=2, blur_kernel=[1, 3, 3, 1]):
+    def __init__(self, size, style_dim,
+                 channel_multiplier=2,
+                 blur_kernel=[1, 3, 3, 1],
+                 ):
         super().__init__()
 
         channels = {
@@ -650,12 +693,12 @@ class Discriminator(nn.Module):
         self.stddev_feat = 1
 
         self.final_conv = ConvLayer(in_channel + 1, channels[4], 3)
-        self.final_linear = nn.Sequential(
-            EqualLinear(channels[4] * 4 * 4, channels[4], activation='fused_lrelu'),
-            EqualLinear(channels[4], 1),
-        )
+        self.final_linear = EqualLinear(channels[4] * 4 * 4, channels[4], activation='fused_lrelu')
 
-    def forward(self, input):
+
+        self.final_linear2 = EqualLinear(channels[4], 1)
+
+    def forward(self, input, label=None):
         out = self.convs(input)
 
         batch, channel, height, width = out.shape
@@ -672,6 +715,10 @@ class Discriminator(nn.Module):
 
         out = out.view(batch, -1)
         out = self.final_linear(out)
+        out = self.final_linear2(out)
 
+        if label is not None:
+            out = out * label
+            out = torch.sum(out, axis=1, keepdim=True)
+            
         return out
-
