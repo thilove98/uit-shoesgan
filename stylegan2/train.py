@@ -3,6 +3,7 @@ import math
 import time
 import random
 import os
+import glob
 import shutil
 import numpy as np
 import torch
@@ -348,8 +349,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('path', type=str)
-    parser.add_argument('--ckpt_dir', type=str, default='/content/drive/My Drive/stylegan2/checkpoint')
-    parser.add_argument('--sample_dir', type=str, default='/content/drive/My Drive/stylegan2/sample')
+    parser.add_argument('--old_ckpt_dir', type=str, default='checkpoint')
+    parser.add_argument('--ckpt_dir', type=str, default='checkpoint')
+    parser.add_argument('--sample_dir', type=str, default='sample')
     parser.add_argument('--save_every', type=int, default=5000)
     parser.add_argument('--stop_after', type=int, default=800000)
     parser.add_argument('--show_pbar', type=int, default=1)
@@ -411,9 +413,9 @@ if __name__ == '__main__':
     os.makedirs(args.sample_dir, exist_ok=True)
 
     # get the lastest ckpt
-    list_ckpt = sorted(os.listdir(args.ckpt_dir))
+    list_ckpt = sorted(glob.glob(args.old_ckpt_dir))
     if len(list_ckpt) > 0:
-        args.ckpt = os.path.join(args.ckpt_dir, list_ckpt[-1])
+        args.ckpt = list_ckpt[-1]
 
     args.start_iter = 0
 
