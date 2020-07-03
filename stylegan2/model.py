@@ -413,7 +413,7 @@ class Generator(nn.Module):
             128: style_dim //4 * channel_multiplier,
             256: style_dim //8 * channel_multiplier,
             512: style_dim //16 * channel_multiplier,
-            1024: style_dim //32 * channel_multiplier,
+            # 1024: style_dim //32 * channel_multiplier,
         }
 
         self.input = ConstantInput(self.channels[4])
@@ -670,7 +670,7 @@ class Discriminator(nn.Module):
             128: style_dim//4 * channel_multiplier,
             256: style_dim//8 * channel_multiplier,
             512: style_dim//16 * channel_multiplier,
-            1024: style_dim//32 * channel_multiplier,
+            #1024: style_dim//32 * channel_multiplier,
         }
 
         convs = [ConvLayer(3, channels[size], 1)]
