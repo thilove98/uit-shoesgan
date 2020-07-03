@@ -1,5 +1,6 @@
 import argparse
 import math
+import time
 import random
 import os
 import shutil
@@ -150,9 +151,16 @@ def train(args, loader, generator, discriminator, g_optim, d_optim, g_ema, devic
 
     sample_z = torch.randn(args.n_sample, args.latent, device=device)
 
+    if args.time_limit:
+        start_time = time.time()
+
     for idx in pbar:
         i = idx + args.start_iter
 
+        if args.time_limit:
+            if (time.time() - start_time) > args.time_limit:
+                return
+        
         if i > args.iter:
             print('Done!')
 
@@ -366,6 +374,8 @@ if __name__ == '__main__':
 
     parser.add_argument('--use_label', type=int, default=0)
     parser.add_argument('--embed_dim', type=int, default=64)
+
+    parser.add_argument('--time_limit', type=int, default=0)
 
     args = parser.parse_args()
 
