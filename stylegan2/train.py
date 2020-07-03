@@ -184,7 +184,7 @@ def train(args, loader, generator, discriminator, g_optim, d_optim, g_ema, devic
         if not args.use_label:
             real_pred = discriminator(real_img)        
         else:
-            real_pred = discriminator(real_img, labels=[real_label])
+            real_pred = discriminator(real_img, real_label)
 
         d_loss = d_logistic_loss(real_pred, fake_pred)
 
@@ -204,7 +204,7 @@ def train(args, loader, generator, discriminator, g_optim, d_optim, g_ema, devic
             if not args.use_label:
                 real_pred = discriminator(real_img)
             else:
-                real_pred = discriminator(real_img, labels=[real_label])
+                real_pred = discriminator(real_img, real_label)
 
             r1_loss = d_r1_loss(real_pred, real_img)
 

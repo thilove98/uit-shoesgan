@@ -516,7 +516,6 @@ class Generator(nn.Module):
                 labels = [self.embed(label) for label in labels]
                 style_t = []
                 for s, z in zip(styles, labels):
-                    print(s.shape, z.shape)
                     style_t.append(
                         self.style(
                             torch.cat([s, z], 1),
