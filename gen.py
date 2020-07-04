@@ -34,7 +34,11 @@ def load_model(model_path='model.pt'):
     # download model
     if not os.path.exists(model_path):
         if USE_LABEL:
-            url_model = 'https://drive.google.com/uc?id=1ChuVbLxYYbYdnqtid37LUEVkmHD5k18Z'
+            # # 046000.pt checkpoint
+            # url_model = 'https://drive.google.com/uc?id=1ChuVbLxYYbYdnqtid37LUEVkmHD5k18Z'
+            
+            # 070000.pt checkpoint
+            url_model = 'https://drive.google.com/uc?id=11j16yb-BAh1xrVA6dKMDVYJq5UJPNfUi'
         else:
             url_model = 'https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq'
         gdown.download(url_model, output=model_path, quiet=False)
