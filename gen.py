@@ -131,5 +131,5 @@ def get_images_from_styles(style1, style2, style3, model=MODEL):
     styles = torch.cat(styles, 0).unsqueeze(0)
     img, _ = model([styles], input_is_latent=True)
     img = img.cpu()
-    img = transforms.ToPILImage()(sample[0].clamp_(-1, 1).add_(1).div_(2 + 1e-5)).convert('RGB')
+    img = transforms.ToPILImage()(img[0].clamp_(-1, 1).add_(1).div_(2 + 1e-5)).convert('RGB')
     return img
