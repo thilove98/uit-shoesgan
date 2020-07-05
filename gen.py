@@ -37,8 +37,11 @@ def load_model(model_path='model.pt'):
             # # 046000.pt checkpoint
             # url_model = 'https://drive.google.com/uc?id=1ChuVbLxYYbYdnqtid37LUEVkmHD5k18Z'
             
-            # 070000.pt checkpoint
-            url_model = 'https://drive.google.com/uc?id=11j16yb-BAh1xrVA6dKMDVYJq5UJPNfUi'
+            # # 070000.pt checkpoint
+            # url_model = 'https://drive.google.com/uc?id=11j16yb-BAh1xrVA6dKMDVYJq5UJPNfUi'
+
+            # # 094000.pt checkpoint
+            url_model = 'https://drive.google.com/uc?id=1v-69x9j6E-Xq-CVMzlNWIpHH6KH_Zj_A'
         else:
             url_model = 'https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq'
         gdown.download(url_model, output=model_path, quiet=False)
