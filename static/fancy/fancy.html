@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Style mixing </title>
+    <link rel="shortcut icon" href="https://tuyensinh.uit.edu.vn/favicon.ico" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='fancy/fancy.css') }}">
+</head>
+<body id="body">
+<img id="banner" src="https://en.uit.edu.vn/sites/vi/files/banner_en.png" alt="Banner">
+<h2 class = "project_name">GENERATING SHOES DESIGNS USING GENERATIVE ADVERSARIAL NETWORKS</h2>
+
+<div>
+    <h3>Create new samples</h3>
+    <div id="tags_type" class="labels">
+    
+    </div>
+</div>
+
+<div class="main_div">
+    <div>
+        <h3>Create new samples</h3>
+        <div id="samples" class="samples">
+        
+        </div>
+    </div>
+    
+    <div style="margin-left: 30px;">
+        <h3>Input</h3>
+        <div id="input" class="input">
+            <div id = "Shape" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+            <div id = "Detail" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+            <div id = "Color" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+        </div>
+    </div>
+
+    <div style="margin-left: 30px;">
+        <h3>Output</h3>
+        <div id="input" class="output">
+        
+        </div>
+    </div>
+    
+</div>
+
+</body>
+<script src="static/fancy/fancy.js"></script>
+</html>
