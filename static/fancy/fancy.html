@@ -11,14 +11,15 @@
 <img id="banner" src="https://en.uit.edu.vn/sites/vi/files/banner_en.png" alt="Banner">
 <h2 class = "project_name">GENERATING SHOES DESIGNS USING GENERATIVE ADVERSARIAL NETWORKS</h2>
 
-<div>
-    <h3>Create new samples</h3>
-    <div id="tags_type" class="labels">
-    
-    </div>
-</div>
+
 
 <div class="main_div">
+    <div>
+        <h3></h3>
+        <div id="tags_type" class="labels">
+        
+        </div>
+    </div>
     <div>
         <h3>Create new samples</h3>
         <div id="samples" class="samples">
@@ -29,16 +30,22 @@
     <div style="margin-left: 30px;">
         <h3>Input</h3>
         <div id="input" class="input">
-            <div id = "Shape" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
-            <div id = "Detail" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
-            <div id = "Color" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+            <div id = "sha" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+            <div id = "det" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+            <div id = "col" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
         </div>
+        <button class="myButton" 
+                style="margin-top: 15px; border-radius: 0px; margin-left: 0; background: crimson;
+                box-shadow: none; text-shadow: none; background-color: crimson;"
+                onclick="btnSubmit()">
+                GENERATE
+        </button>
     </div>
 
     <div style="margin-left: 30px;">
         <h3>Output</h3>
-        <div id="input" class="output">
-        
+        <div id="output" class="output">
+            <img id = "res"></img>
         </div>
     </div>
     

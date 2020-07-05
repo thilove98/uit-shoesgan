@@ -21,6 +21,23 @@ def img2str(img):
     rawBytes.seek(0) 
     return base64.b64encode(rawBytes.read()).decode('utf-8')
 
+@app.route("/get_images_from_styles", methods=['POST', 'GET'])
+def stl2img():
+    data = request.json
+    shape = np.array(data['Shape'])
+    detail = np.array(data['Detail'])
+    color = np.array(data['Color'])
+    img = get_images_from_styles(shape, detail, color)
+    return jsonify({"image": img2str(img)})
+
+@app.route("/get_style_from_label", methods=['POST', 'GET'])
+def lal2stys():
+    data = request.json
+    labels = np.array(data["labels"])
+    vectors = get_style_from_label(labels)
+    vectors = [[i for i in vector] for vector in vectors]
+    return jsonify({"vectors": vectors})
+
 @app.route("/", methods=['POST', 'GET'])
 def home():
     return render_template("fancy.html")

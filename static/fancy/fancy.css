@@ -1,6 +1,6 @@
 h3{
     font-family: Arial;
-    margin-bottom: 0px;
+    margin-bottom: 5px;
 }
 body{
     background: lightgoldenrodyellow;
@@ -34,7 +34,7 @@ div.samples {
 	color:#ffffff;
 	font-family:Arial;
 	font-size:15px;
-	margin:2px 4px;
+	margin:3px 0px 0px 4px;
     text-decoration:none;
     height: 30px;
 	text-shadow:0px 1px 0px #263666;
@@ -49,8 +49,8 @@ div.samples {
 }
 .myButton:focus { outline: none; }
 .labels{
-    height: 70px;
-    width: 40%;
+    height: 400px;
+    width: 300px;
     overflow: auto;
 }
 .input{
@@ -66,8 +66,8 @@ div.samples {
 }
 .output{
     display: flex;
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     border: solid;
     border-color: #415989;
 }
