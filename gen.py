@@ -40,11 +40,11 @@ def load_model(model_path='model.pt'):
             # # 070000.pt checkpoint
             # url_model = 'https://drive.google.com/uc?id=11j16yb-BAh1xrVA6dKMDVYJq5UJPNfUi'
 
-            # # 094000.pt checkpoint
-            # url_model = 'https://drive.google.com/uc?id=1v-69x9j6E-Xq-CVMzlNWIpHH6KH_Zj_A'
+            # 094000.pt checkpoint
+            url_model = 'https://drive.google.com/uc?id=1v-69x9j6E-Xq-CVMzlNWIpHH6KH_Zj_A'
 
             # 118000.pt checkpoint
-            url_model = 'https://drive.google.com/uc?id=1BEmhupZahOdlHiS2Nxjb1mJi9KDwZ1Od'
+            # url_model = 'https://drive.google.com/uc?id=1BEmhupZahOdlHiS2Nxjb1mJi9KDwZ1Od'
 
         else:
             url_model = 'https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq'
