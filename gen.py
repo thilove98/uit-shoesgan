@@ -134,6 +134,10 @@ def get_images_from_styles(style1, style2, style3, weight=0.8, model=MODEL, mult
         output:
         - image with size 512x512
     """
+    style1 = np.array(style1, dtype=np.float32)
+    style2 = np.array(style2, dtype=np.float32)
+    style3 = np.array(style3, dtype=np.float32)
+
     styles = []
     assert 0.0 <= weight <= 1.0
     style2 = (1 - weight) * style1 + weight * style2
