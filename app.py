@@ -18,7 +18,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 def img2str(img):
     rawBytes = BytesIO()
     img.save(rawBytes, "PNG")
-    rawBytes.seek(0) 
+    rawBytes.seek(0)
     return base64.b64encode(rawBytes.read()).decode('utf-8')
 
 @app.route("/get_images_from_styles", methods=['POST', 'GET'])
@@ -35,7 +35,7 @@ def lal2stys():
     data = request.json
     labels = np.array(data["labels"])
     vectors = get_style_from_label(labels)
-    vectors = [[i for i in vector] for vector in vectors]
+    vectors = [[float(i) for i in vector] for vector in vectors]
     return jsonify({"vectors": vectors})
 
 @app.route("/", methods=['POST', 'GET'])
