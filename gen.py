@@ -36,15 +36,15 @@ def load_model(model_path='model.pt'):
         if USE_LABEL:
             # # 046000.pt checkpoint
             # url_model = 'https://drive.google.com/uc?id=1ChuVbLxYYbYdnqtid37LUEVkmHD5k18Z'
-            
+
             # # 070000.pt checkpoint
             # url_model = 'https://drive.google.com/uc?id=11j16yb-BAh1xrVA6dKMDVYJq5UJPNfUi'
 
-            # # 094000.pt checkpoint
-            # url_model = 'https://drive.google.com/uc?id=1v-69x9j6E-Xq-CVMzlNWIpHH6KH_Zj_A'
+            # 094000.pt checkpoint
+            url_model = 'https://drive.google.com/uc?id=1v-69x9j6E-Xq-CVMzlNWIpHH6KH_Zj_A'
 
             # 118000.pt checkpoint
-            url_model = 'https://drive.google.com/uc?id=1BEmhupZahOdlHiS2Nxjb1mJi9KDwZ1Od'
+            # url_model = 'https://drive.google.com/uc?id=1BEmhupZahOdlHiS2Nxjb1mJi9KDwZ1Od'
 
         else:
             url_model = 'https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq'
@@ -56,7 +56,7 @@ def load_model(model_path='model.pt'):
     generator = Generator(RESOLUTION, LATENT_SIZE, 8, 2,
         labels_in=True, label_size=LABEL_SIZE, shared_dim=SHARED_DIM,
         ).to(DEVICE)
-    
+
     generator.load_state_dict(checkpoint['g_ema'])
     generator.eval()
     return generator
@@ -105,11 +105,11 @@ def get_random_images(n_samples, size, batch_size=16, model=MODEL):
             continue
         samples, latents = gen_images(batch, model)
         for sample, latent in zip(samples, latents):
-            img = transforms.ToPILImage()(sample.clamp_(-1, 1).add_(1).div_(2 + 1e-5))            
-            img = img.convert('RGB').resize(size)            
+            img = transforms.ToPILImage()(sample.clamp_(-1, 1).add_(1).div_(2 + 1e-5))
+            img = img.convert('RGB').resize(size)
             style = latent[0].numpy()
 
-            item = [img, style, str(index)]           
+            item = [img, style, str(index)]
             results.append(item)
             index += 1
     return results
@@ -128,13 +128,19 @@ def get_style_from_label(labels, model=MODEL):
 
 
 @torch.no_grad()
-def get_images_from_styles(style1, style2, style3, model=MODEL):
+def get_images_from_styles(style1, style2, style3, weight=0.8, model=MODEL, multi_output=False):
     """input:
         - style1, style2, style3 : vector with shape (320,)
         output:
         - image with size 512x512
     """
+    style1 = np.array(style1, dtype=np.float32)
+    style2 = np.array(style2, dtype=np.float32)
+    style3 = np.array(style3, dtype=np.float32)
+
     styles = []
+    assert 0.0 <= weight <= 1.0
+    style2 = (1 - weight) * style1 + weight * style2
     for i, style in enumerate([style1, style2, style3]):
         style = torch.tensor(style, device=DEVICE)
         style = style.repeat(LEVELS[i], 1)
@@ -144,3 +150,4 @@ def get_images_from_styles(style1, style2, style3, model=MODEL):
     img = img.cpu()
     img = transforms.ToPILImage()(img[0].clamp_(-1, 1).add_(1).div_(2 + 1e-5)).convert('RGB')
     return img
+
