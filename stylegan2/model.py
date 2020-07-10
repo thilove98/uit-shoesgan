@@ -694,7 +694,9 @@ class Discriminator(nn.Module):
 
         self.final_conv = ConvLayer(in_channel + 1, channels[4], 3)
 
-        if use_label:
+        self.use_label = use_label
+
+        if self.use_label:
             self.final_linear = EqualLinear(channels[4] * 4 * 4, channels[4], activation='fused_lrelu')
             self.final_linear2 = EqualLinear(channels[4], 1)
         else:
@@ -719,10 +721,14 @@ class Discriminator(nn.Module):
         out = self.final_conv(out)
 
         out = out.view(batch, -1)
-        out = self.final_linear(out)
-        out = self.final_linear2(out)
 
-        if label is not None:
+        if label is not None and self.use_label:
+            out = self.final_linear(out)
+            out = self.final_linear2(out)
+        else:
+            out = self.final_linear(out)
+
+        if label is not None and self.use_label:
             out = out * label
             out = torch.sum(out, axis=1, keepdim=True)
             
