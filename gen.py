@@ -41,7 +41,7 @@ def load_model(model_path='model.pt'):
 
 def load_latents(latents_path='latents512.pkl'):
     if not os.path.exists(latents_path):
-        url_latents = ''
+        url_latents = 'https://drive.google.com/uc?id=1Oo_R2un4FO5srZpZowGbDvDzYdo5MaNq&export=download'
         gdown.download(url_latents, output=latents_path, quiet=False)
     with open(latents_path, 'rb') as f:
         latents = pickle.load(f)
