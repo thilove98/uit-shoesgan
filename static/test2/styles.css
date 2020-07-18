@@ -1,0 +1,65 @@
+#logo{
+    max-width: 100%;
+    height: auto;
+    width: auto; 
+}
+
+.jumbotron{
+    padding: 20px; /* fills out the jumbotron */
+    background-color: #111;
+}
+
+.jumbotron h1 {
+    text-align: center;
+    color: #FFF;
+    font-family: 'Raleway', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+canvas {
+    padding: 10;
+    margin: auto;
+    width: 100%;
+    height: 512px;
+    background-color: #ddd;
+}
+
+.btn-primary {
+    display: block;
+    margin: 0 auto;
+    background-color: #888;
+}
+.btn-primary:hover{
+    background-color: #111;
+}
+.btn-primary:disabled {
+    background-color: #888;
+}
+.btn-primary:active{
+    background-color: #111;
+}
+.btn-primary:focus {
+    outline: none;
+    background-color: #111;
+}
+
+
+
+#output {
+    padding: 0;
+    margin: auto;
+    margin-bottom: 10px;
+    width: 512px;
+    height: 512px;
+    background-color: #ddd;
+}
+
+#styles {
+    padding: 0;
+    margin: auto;
+    margin-bottom: 10px;
+    width: 384px;
+    height: 512px;
+    background-color: #ddd;
+}

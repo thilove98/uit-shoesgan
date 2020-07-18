@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='test2/styles.css')}}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <title>UIT Shoes Generator</title>
+        <link rel="shortcut icon" href="https://tuyensinh.uit.edu.vn/favicon.ico" type="image/x-icon">
+
+    </head>
+    
+    <body>
+        <div class="jumbotron">
+            <div class="container-fluid">
+            <h1>GENERATING SHOES DESIGNS USING GAN</h1>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div id="styles" width=384 height=512></div>
+                    <button class="btn btn-primary btn-lg" onclick="btnRandomImages('styles')">Random</button>
+                </div>
+                <div class="col-lg-5">
+                    <div id="output" width=512 height=512></div>
+                    <button class="btn btn-primary btn-lg" onclick="btnRandomImages('output')">Random</button>
+                </div>
+                <div class="col-lg-4">
+                    <canvas id="input" width=384 height=512></canvas>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    </body>
+    <script src="static/test2/script.js"></script>
+
+</html>
