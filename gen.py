@@ -1,12 +1,11 @@
 import os
+import wget
 import random
 import gdown
 import torch
 import numpy as np
 from torchvision import transforms, utils
-from model import Generator
-
-USE_LABEL = True
+from model2 import Generator
 
 SEED = 2020
 DEVICE = 'cuda'
@@ -15,10 +14,8 @@ RESOLUTION = 512
 LEVELS = [4, 4, 8]
 
 LABELS_IN = True
-LABEL_SIZE = 11
-SHARED_DIM = 64
 
-LATENT_SIZE = 256 if USE_LABEL else 128
+LATENT_SIZE = 512
 
 def seed_everything(seed):
     random.seed(seed)
@@ -33,29 +30,16 @@ seed_everything(SEED)
 def load_model(model_path='model.pt'):
     # download model
     if not os.path.exists(model_path):
-        if USE_LABEL:
-            # # 046000.pt checkpoint
-            # url_model = 'https://drive.google.com/uc?id=1ChuVbLxYYbYdnqtid37LUEVkmHD5k18Z'
-
-            # # 070000.pt checkpoint
-            # url_model = 'https://drive.google.com/uc?id=11j16yb-BAh1xrVA6dKMDVYJq5UJPNfUi'
-
-            # 094000.pt checkpoint
-            url_model = 'https://drive.google.com/uc?id=1v-69x9j6E-Xq-CVMzlNWIpHH6KH_Zj_A'
-
-            # 118000.pt checkpoint
-            # url_model = 'https://drive.google.com/uc?id=1BEmhupZahOdlHiS2Nxjb1mJi9KDwZ1Od'
-
-        else:
-            url_model = 'https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq'
-        gdown.download(url_model, output=model_path, quiet=False)
-
+        # model kaggle 512 transfer
+        url_model = 'https://www.kaggleusercontent.com/kf/38674976/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..lSr-Ys6CHHJw9sCJutEwOA.F7nobtYD4y_M2ONtUFVaiQsQQbuxFhRLtjRxEPiNx8AuIMigztl1B4r3xKeLPhQlC3Zt8fvEUb8e2K8SWSu3HSjAYDhedWlIg7YBGclX7yBi1xutu2gK_N7zovv2smJ1syU9OreCj4nZmyW_gAUxoKS63uNEYMiq-nEG-7ydM7O2kYGig5kDHHTbasGhqMsO3_JtKtgqf9ngt7vrfhQ9jGxXw2FmWMm_pvqJn_eR3ICELRoQe4o7HZ_46g0gnRkidMYajY6_3dYw1Ddn_MMpnDhKKousqqamOq0X_T_YbCw_XWwCVpJD-GQ3GrGMfp20htAIcwJB_tYvizXz-7k6hhe43aX64FeOF084e1Zb6wsqoYvnRBWxrRF0rmwBbOvOJjEgUy0bku8fHWN07NfpPtM1JusijHaRi2CfLaA9M-tYEhq6Vf_kcJ3SvpvxlkMy27mgY4lWWWsksd4HZKgm-O8WHWsaSDgVKPIFYh-7X_RWpLbN-xzhytjeoXrSOva-39ljMO8VBgwFCwc_d6bfb6BlVNcLPUkKcrxi7BQmQ41Oz7Bpqr7KnoNuCSQegzyL19ihS7GSA6lLBxTPh27oc-5QuH2svo0hsP5rBaHGiAKLUqqkW1WaOvMzYIw-p0mEvnh1sGoEN7jWETq1yPk2UQ.NMNoGsbv5CAj35rx33x_uw/checkpoint/039390.pt'
+        wget.download(url_model, out=model_path)
+        # url_model = 'https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq'
+        # gdown.download(url_model, output=model_path, quiet=False)
+ 
     # load checkpoint
     checkpoint = torch.load(model_path)
 
-    generator = Generator(RESOLUTION, LATENT_SIZE, 8, 2,
-        labels_in=True, label_size=LABEL_SIZE, shared_dim=SHARED_DIM,
-        ).to(DEVICE)
+    generator = Generator(RESOLUTION, LATENT_SIZE, 8).to(DEVICE)
 
     generator.load_state_dict(checkpoint['g_ema'])
     generator.eval()
