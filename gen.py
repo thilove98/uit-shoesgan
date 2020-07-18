@@ -1,19 +1,18 @@
 import os
-import wget
 import random
+import pickle
+import wget
 import gdown
 import torch
 import numpy as np
 from torchvision import transforms, utils
-from model2 import Generator
+from model import Generator
 
 SEED = 2020
 DEVICE = 'cuda'
 
 RESOLUTION = 512
 LEVELS = [4, 4, 8]
-
-LABELS_IN = True
 
 LATENT_SIZE = 512
 
@@ -28,15 +27,10 @@ def seed_everything(seed):
 seed_everything(SEED)
 
 def load_model(model_path='model.pt'):
-    # download model
     if not os.path.exists(model_path):
         # model kaggle 512 transfer
         url_model = 'https://www.kaggleusercontent.com/kf/38674976/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..lSr-Ys6CHHJw9sCJutEwOA.F7nobtYD4y_M2ONtUFVaiQsQQbuxFhRLtjRxEPiNx8AuIMigztl1B4r3xKeLPhQlC3Zt8fvEUb8e2K8SWSu3HSjAYDhedWlIg7YBGclX7yBi1xutu2gK_N7zovv2smJ1syU9OreCj4nZmyW_gAUxoKS63uNEYMiq-nEG-7ydM7O2kYGig5kDHHTbasGhqMsO3_JtKtgqf9ngt7vrfhQ9jGxXw2FmWMm_pvqJn_eR3ICELRoQe4o7HZ_46g0gnRkidMYajY6_3dYw1Ddn_MMpnDhKKousqqamOq0X_T_YbCw_XWwCVpJD-GQ3GrGMfp20htAIcwJB_tYvizXz-7k6hhe43aX64FeOF084e1Zb6wsqoYvnRBWxrRF0rmwBbOvOJjEgUy0bku8fHWN07NfpPtM1JusijHaRi2CfLaA9M-tYEhq6Vf_kcJ3SvpvxlkMy27mgY4lWWWsksd4HZKgm-O8WHWsaSDgVKPIFYh-7X_RWpLbN-xzhytjeoXrSOva-39ljMO8VBgwFCwc_d6bfb6BlVNcLPUkKcrxi7BQmQ41Oz7Bpqr7KnoNuCSQegzyL19ihS7GSA6lLBxTPh27oc-5QuH2svo0hsP5rBaHGiAKLUqqkW1WaOvMzYIw-p0mEvnh1sGoEN7jWETq1yPk2UQ.NMNoGsbv5CAj35rx33x_uw/checkpoint/039390.pt'
         wget.download(url_model, out=model_path)
-        # url_model = 'https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq'
-        # gdown.download(url_model, output=model_path, quiet=False)
- 
-    # load checkpoint
     checkpoint = torch.load(model_path)
 
     generator = Generator(RESOLUTION, LATENT_SIZE, 8).to(DEVICE)
@@ -45,8 +39,19 @@ def load_model(model_path='model.pt'):
     generator.eval()
     return generator
 
+def load_latents(latents_path='latents512.pkl'):
+    if not os.path.exists(latents_path):
+        url_latents = ''
+        gdown.download(url_latents, output=latents_path, quiet=False)
+    with open(latents_path, 'rb') as f:
+        latents = pickle.load(f)
+    return latents
 
 MODEL = load_model()
+LATENTS = load_latents()
+
+## fake label for testing
+LABELS = np.random.randint(0, len(LATENTS), size=len(LATENTS))
 
 @torch.no_grad()
 def style_to_image(style1, style2, style3, model=MODEL):
@@ -80,6 +85,28 @@ def gen_images(batch, model=MODEL):
     latents = latents.cpu()
     return samples, latents
 
+
+@torch.no_grad()
+def get_random_images(inputs=[-1, -1, 2], model=MODE):
+    results = []
+    for x in inputs:
+        if x == -1:
+            latent_z = torch.randn(1, LATENT_SIZE)
+            image, latent_w = model([latent_z], return_latents=True)
+            latent_w = latent_w[:, 0, :]
+        else:
+            latent_w = torch.from_numpy(LATENTS[LABELS[x]])
+            image, test = model([latent_w], input_is_latent=True, return_latents=True)
+            print("test")
+            print(latent_w - test[:, 0, :])
+        
+        image = transforms.ToPILImage()(image.cpu().clamp_(-1, 1).add_(1).div_(2 + 1e-5))
+        latent_w = latent_w.cpu().numpy()
+        item = [image, latent_w]
+        results.append(item)
+    return results
+
+"""
 def get_random_images(n_samples, size, batch_size=16, model=MODEL):
     batches = [batch_size] * (n_samples//batch_size) + [n_samples%batch_size]
     results = []
@@ -97,6 +124,7 @@ def get_random_images(n_samples, size, batch_size=16, model=MODEL):
             results.append(item)
             index += 1
     return results
+"""
 
 @torch.no_grad()
 def get_style_from_label(labels, model=MODEL):
