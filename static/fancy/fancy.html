@@ -1,50 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title> Style mixing </title>
-    <link rel="shortcut icon" href="https://tuyensinh.uit.edu.vn/favicon.ico" type="image/x-icon">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='fancy/fancy.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <title>UIT Shoes Generator</title>
+    <link rel="shortcut icon" href="https://tuyensinh.uit.edu.vn/favicon.ico" type="image/x-icon">
 </head>
 <body id="body">
-<img id="banner" src="https://en.uit.edu.vn/sites/vi/files/banner_en.png" alt="Banner">
-<h2 class = "project_name">GENERATING SHOES DESIGNS USING GENERATIVE ADVERSARIAL NETWORKS</h2>
+    <div class="jumbotron">
+        <div class="container-fluid">
+        <h1>GENERATING SHOES DESIGNS USING GAN</h1>
+        </div>
+    </div>
 
-
-
-<div class="main_div">
     <div>
-        <h3></h3>
         <div id="tags_type" class="labels">
         
         </div>
     </div>
+<div class="main_div">
     <div>
-        <h3>Create new samples</h3>
+        <h3>Samples</h3>
         <div id="samples" class="samples">
-        
         </div>
     </div>
     
-    <div style="margin-left: 30px;">
-        <h3>Input</h3>
-        <div id="input" class="input">
-            <div id = "sha" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
-            <div id = "det" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
-            <div id = "col" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+    <div style="margin-left: 10px;">
+        <div style="width: 80px;">
+            <h3>Input</h3>
+            <div id="input" class="input">
+                <div id = "sha" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+                <div id = "det" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+                <div id = "col" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+            </div>
         </div>
         <button class="myButton" 
-                style="margin-top: 15px; border-radius: 0px; margin-left: 0; background: crimson;
-                box-shadow: none; text-shadow: none; background-color: crimson;"
-                onclick="btnSubmit()">
-                GENERATE
+            style="margin-top: 15px; border-radius: 0px; margin-left: 0; background: crimson;
+            box-shadow: none; text-shadow: none; background-color: crimson; width: 80px; font-size: small;"
+            onclick="btnSubmit()">
+            GENERATE
         </button>
     </div>
 
-    <div style="margin-left: 30px;">
+    <div style="margin-left: 10px;">
         <h3>Output</h3>
         <div id="output" class="output">
+            <img id = "res"></img>
+        </div>
+    </div>
+
+    <div style="margin-left: 10px; ">
+        <h3>   </h3>
+        <div id="output1" style="width: 400px; height: 400px;border: solid;">
             <img id = "res"></img>
         </div>
     </div>

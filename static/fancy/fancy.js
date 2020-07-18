@@ -16,17 +16,6 @@ function addSample(src, name=""){
     tempImg.width = size
     tempImg.height = size
     tempImg.draggable = true
-    tempImg.ondblclick = async function(){
-        conOutput = document.getElementById('output')
-        conOutput.innerHTML = ""
-        let temp = document.createElement("img")
-        temp.src = this.src
-        temp.width = 400
-        temp.height = 400
-        temp.onload = function(){
-        conOutput.appendChild(temp)
-    }
-    }
     tempImg.ondragstart = function(event){
         focusId = event.target.id
     }
@@ -42,8 +31,8 @@ function drop(ev) {
     let container = document.getElementById(idCon.substring(0, 3))
     container.innerHTML = ""
     let temp = document.createElement("img")
-    temp.height = size
-    temp.width = size
+    temp.height = size -6
+    temp.width = size -6
     temp.src = document.getElementById(focusId).src
     temp.id = idCon + 'img'
     container.appendChild(temp)
@@ -79,15 +68,29 @@ async function btnSubmit(){
     shape = imgCode[styles['sha']]
     detail = imgCode[styles['det']]
     color = imgCode[styles['col']]
-    data = await getImageByVectors(shape, detail, color)
+    let arr = [shape, detail, color]
     conOutput = document.getElementById('output')
     conOutput.innerHTML = ""
-    let temp = document.createElement("img")
-    temp.src = "data:image/jpeg;base64," + data.image
-    temp.width = 400
-    temp.height = 400
-    temp.onload = function(){
-        conOutput.appendChild(temp)
+    for(let i = 0; i<3;i++)for(let j=0;j<3;j++)for(let k=0;k<3;k++){
+        data = await getImageByVectors(arr[i], arr[j], arr[k])
+        let temp = document.createElement("img")
+        temp.src = "data:image/jpeg;base64," + data.image
+        temp.width = size
+        temp.height = size
+        temp.ondblclick = async function(){
+            conOut = document.getElementById('output1')
+            conOut.innerHTML = ""
+            let temp = document.createElement("img")
+            temp.src = this.src
+            temp.width = 400 - 6
+            temp.height = 400 - 6
+            temp.onload = function(){
+            conOut.appendChild(temp)
+        }
+        }
+        temp.onload = function(){
+            conOutput.appendChild(temp)
+        }
     }
 }
 function makeid(length){

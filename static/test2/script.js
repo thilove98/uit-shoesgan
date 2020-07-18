@@ -1,6 +1,6 @@
 
-IMG_SIZE = 512;
-MINI_SIZE = 128;
+IMG_SIZE = 400;
+MINI_SIZE = 80;
 
 url = document.URL;
 

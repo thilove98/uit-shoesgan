@@ -1,9 +1,23 @@
-h3{
-    font-family: Arial;
-    margin-bottom: 5px;
-}
 body{
-    background: lightgoldenrodyellow;
+    background: #ddd;
+}
+h3{
+    text-align: center;
+    margin-top: 0px;
+}
+.jumbotron{
+     /* fills out the jumbotron */
+    background-color: #111;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+.jumbotron h1 {
+    text-align: center;
+    color: #FFF;
+    font-family: 'Raleway', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 #banner {
     margin-left: 30px;
@@ -16,9 +30,10 @@ body{
 }
 .main_div{
     display: flex;
+    margin-left: 10px;
 }
 div.samples {
-    width: 400px;
+    width: 265px;
     height: 300px;
     overflow: auto;
     border:solid;
@@ -49,13 +64,14 @@ div.samples {
 }
 .myButton:focus { outline: none; }
 .labels{
-    height: 400px;
-    width: 300px;
-    overflow: auto;
+    height: 38px;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 .input{
-    width: 100px;
-    height: 260px;
+    width: 80px;
+    height: 240px;
 }
 .sub_input{
     border: solid;
@@ -65,9 +81,8 @@ div.samples {
     margin-bottom: 2px;
 }
 .output{
-    display: flex;
-    width: 400px;
-    height: 400px;
+    width: 486px;
+    height: 406px;
     border: solid;
     border-color: #415989;
 }
