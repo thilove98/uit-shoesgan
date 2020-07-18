@@ -38,6 +38,14 @@ def lal2stys():
     vectors = [[i for i in vector] for vector in vectors]
     return jsonify({"vectors": vectors})
 
+@app.route("/get_style_from_random", methods=['POST', 'GET'])
+def rnd2stl():
+    data = request.json
+    n_samples = np.array(data["num_images"])
+    vectors = get_style_from_random(n_samples)
+    vector = [[i for i in vector] for vector in vectors]
+    return jsonify({"vectors": vectors})
+
 @app.route("/", methods=['POST', 'GET'])
 def home():
     return render_template("fancy.html")

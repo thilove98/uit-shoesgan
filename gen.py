@@ -95,49 +95,39 @@ def get_random_images(inputs=[-1, -1, 2], model=MODEL):
             image, latent_w = model([latent_z], return_latents=True)
             latent_w = latent_w[:, 0, :]
         else:
-            latent_w = torch.from_numpy(LATENTS[LABELS[x]]).to(DEVICE)
+            latent_w = LATENTS[LABELS[x]].reshape(1, LATENT_SIZE)
+            latent_w = torch.from_numpy(latent_w).to(DEVICE)
+
             image, test = model([latent_w], input_is_latent=True, return_latents=True)
-            print("test")
-            print(latent_w - test[:, 0, :])
         
-        image = transforms.ToPILImage()(image.cpu().clamp_(-1, 1).add_(1).div_(2 + 1e-5))
-        latent_w = latent_w.cpu().numpy()
+        image = transforms.ToPILImage()(image[0].cpu().clamp_(-1, 1).add_(1).div_(2 + 1e-5))
+        latent_w = latent_w.cpu().numpy().reshape(-1,)
         item = [image, latent_w]
         results.append(item)
     return results
 
-"""
-def get_random_images(n_samples, size, batch_size=16, model=MODEL):
-    batches = [batch_size] * (n_samples//batch_size) + [n_samples%batch_size]
-    results = []
-    index = 0
-    for batch in batches:
-        if batch == 0:
-            continue
-        samples, latents = gen_images(batch, model)
-        for sample, latent in zip(samples, latents):
-            img = transforms.ToPILImage()(sample.clamp_(-1, 1).add_(1).div_(2 + 1e-5))
-            img = img.convert('RGB').resize(size)
-            style = latent[0].numpy()
-
-            item = [img, style, str(index)]
-            results.append(item)
-            index += 1
-    return results
-"""
-
 @torch.no_grad()
 def get_style_from_label(labels, model=MODEL):
+    #TODO rewrite this
     """input:
         - labels: a list of labels, i.e [1, 2, 3]
         output:
-        - a numpy array of vector styles with shape: (len(labels), 320)
+        - a numpy array of vector styles with shape:
     """
-    labels = torch.tensor(labels, dtype=torch.long, device=DEVICE)
-    latents = torch.randn(labels.shape[0], LATENT_SIZE, device=DEVICE)
-    styles = model.get_latent(latents, label=labels)
-    return styles.cpu().numpy()
+    labels = np.array(labels)
+    latents = LATENTS[labels]
+    return latents
 
+@torch.no_grad()
+def get_style_from_random(n_samples, model=MODEL):
+    """input:
+        - n_samples: number of styles
+        output:
+        - a numpy array of vector styles with random 
+    """
+    latent_z = torch.randn(n_samples, LATENT_SIZE).to(DEVICE)
+    latent_w = model.get_latent(latent_z)
+    return latent_w.cpu().numpy()
 
 @torch.no_grad()
 def get_images_from_styles(style1, style2, style3, weight=0.8, model=MODEL, multi_output=False):

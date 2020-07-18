@@ -20,6 +20,9 @@ def get_style_from_label(labels, model=None):
     """
     return [[i, i, i, i*2, i*2] for i in range(len(labels))]
 
+def get_style_from_random(n_samples, model=None):
+    return [[i ,i ,i ,i*2, i*2] for i in range(n_samples)]
+
 def get_images_from_styles(style1, style2, style3, model=None):
     """input:
         - style1, style2, style3 : vector with shape (320,)

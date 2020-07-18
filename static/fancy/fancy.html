@@ -18,14 +18,13 @@
 
     <div>
         <div id="tags_type" class="labels">
-        
         </div>
     </div>
 <div class="main_div">
     <div>
         <h3>Samples</h3>
-        <div id="samples" class="samples">
-        </div>
+        <div id="samples" class="samples"></div>
+        <button class="RandomButton" onclick="btnRandom()">RANDOM</button>
     </div>
     
     <div style="margin-left: 10px;">
@@ -37,9 +36,9 @@
                 <div id = "col" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
             </div>
         </div>
-        <button class="myButton" 
-            style="margin-top: 15px; border-radius: 0px; margin-left: 0; background: crimson;
-            box-shadow: none; text-shadow: none; background-color: crimson; width: 80px; font-size: small;"
+        <button class="myButton"
+            style="margin-top: 15px; border-radius: 0px; margin-left: 0;
+            background: crimson; box-shadow: none; text-shadow: none; background-color: crimson; width: 80px; font-size: small;"
             onclick="btnSubmit()">
             GENERATE
         </button>
@@ -54,13 +53,12 @@
 
     <div style="margin-left: 10px; ">
         <h3>   </h3>
-        <div id="output1" style="width: 400px; height: 400px;border: solid;">
+        <div id="output1">
             <img id = "res"></img>
         </div>
     </div>
     
 </div>
-
 </body>
 <script src="static/fancy/fancy.js"></script>
 </html>

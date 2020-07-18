@@ -8,6 +8,17 @@ styles = {
 size = 80
 focusId = ""
 url = document.URL
+
+function makeid(length){
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 function addSample(src, name=""){
     let tempImg = document.createElement("img")
     tempImg.src = src
@@ -51,6 +62,7 @@ async function getVectorsByLabels(labels){
         contentType : "application/json"
     });
 }
+
 async function getImageByVectors(shape, detail, color){
     var formData = JSON.stringify({"Shape": shape, "Detail": detail, "Color": color});
     return await $.ajax({
@@ -61,9 +73,37 @@ async function getImageByVectors(shape, detail, color){
             return data
         },
         dataType: "json",
-        contentType : "application/json"
+        contentType: "application/json"
     });
 }
+
+async function getRandomImages(num_images) {
+    var formData = JSON.stringify({"num_images": num_images});
+    return await $.ajax({
+        type: "POST",
+        url: url + "/get_style_from_random",
+        data: formData,
+        success: function(data) {
+            return data;
+        },
+        dataType: "json",
+        contentType: "application/json",
+    });
+}
+
+async function btnRandom() {
+    let num_images = 4;
+    data = await getRandomImages(num_images);
+    vectors = data.vectors    
+    for (let i=0; i<num_images; ++i) {
+        data = await getImageByVectors(vectors[i], vectors[i], vectors[i]);
+        name = makeid(10);
+        imgCode[name] = vectors[i];
+        addSample("data:image/jpeg;base64,"+data.image, name);
+    }
+
+}
+
 async function btnSubmit(){
     shape = imgCode[styles['sha']]
     detail = imgCode[styles['det']]
@@ -93,15 +133,7 @@ async function btnSubmit(){
         }
     }
 }
-function makeid(length){
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-}
+
 function load(){
     for(let i=0;i<labels.length;i++){
         var btn = document.createElement("BUTTON");

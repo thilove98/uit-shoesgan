@@ -1,5 +1,5 @@
 body{
-    background: #ddd;
+    background: #fff;
 }
 h3{
     text-align: center;
@@ -9,8 +9,8 @@ h3{
      /* fills out the jumbotron */
     background-color: #111;
     padding-top: 10px;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
 }
 .jumbotron h1 {
     text-align: center;
@@ -31,6 +31,8 @@ h3{
 .main_div{
     display: flex;
     margin-left: 10px;
+    background-color: #fff;
+    padding-bottom: 40px;
 }
 div.samples {
     width: 265px;
@@ -39,6 +41,7 @@ div.samples {
     border:solid;
     border-color: #415989;
 }
+
 .myButton {
 	box-shadow:inset 0px 0px 15px 3px #23395e;
 	background:linear-gradient(to bottom, #2e466e 5%, #415989 100%);
@@ -85,4 +88,27 @@ div.samples {
     height: 406px;
     border: solid;
     border-color: #415989;
+}
+#output1{
+    margin-top: 41px;
+    width: 406px;
+    height: 406px;
+    border: solid;
+    border-color: #415989;
+}
+
+
+
+
+
+.col {
+    padding: 10px;
+    margin: auto;
+    width: 100%;
+    height: 512px;
+    background-color: #ddd
+}
+
+#myrow {
+    background-color: #111;
 }
