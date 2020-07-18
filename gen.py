@@ -87,15 +87,15 @@ def gen_images(batch, model=MODEL):
 
 
 @torch.no_grad()
-def get_random_images(inputs=[-1, -1, 2], model=MODE):
+def get_random_images(inputs=[-1, -1, 2], model=MODEL):
     results = []
     for x in inputs:
         if x == -1:
-            latent_z = torch.randn(1, LATENT_SIZE)
+            latent_z = torch.randn(1, LATENT_SIZE).to(DEVICE)
             image, latent_w = model([latent_z], return_latents=True)
             latent_w = latent_w[:, 0, :]
         else:
-            latent_w = torch.from_numpy(LATENTS[LABELS[x]])
+            latent_w = torch.from_numpy(LATENTS[LABELS[x]]).to(DEVICE)
             image, test = model([latent_w], input_is_latent=True, return_latents=True)
             print("test")
             print(latent_w - test[:, 0, :])
