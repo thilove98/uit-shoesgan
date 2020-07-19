@@ -49,27 +49,16 @@ def load_latents(latents_path='latents512.pkl'):
     return latents
 
 def load_labels(labels_path='labels.json'):
-    labels = {}
-    all_labels = []
-
     with open(labels_path, 'r') as f:
         labels = json.load(f)
-    for value in labels.values():
-        for k, v in value.items():
-            if v == True:
-                item = k
-            else:
-                item = v
-            if item not in all_labels:
-                all_labels.append(item)
-    return labels, sorted(all_labels)
+    return labels
 
 MODEL = load_model()
 LATENTS = load_latents()
 
 ## fake label for testing
-LABELS, ALL_LABELS = load_labels()
-print(ALL_LABELS)
+LABELS = load_labels()
+print(LABELS.keys())
 
 @torch.no_grad()
 def style_to_image(style1, style2, style3, model=MODEL):
@@ -132,16 +121,13 @@ def get_style_from_label(labels, model=MODEL):
         output:
         - a numpy array of vector styles with shape:
     """
+    name = labels[0]
 
-    name = ALL_LABELS[labels[0]]
-    results = []
-    for key, value in LABELS.items():
-        for k, v in value.items():
-            if k == name or v == name:
-                results.append(int(key))
-    results = random.sample(results, len(results))
-    labels = np.array(results[: len(labels)])
+    results = LABELS[name]
+    labels = random.sample(results, len(labels))
+    labels = np.array(labels)
     latents = LATENTS[labels]
+
     return latents
 
 @torch.no_grad()
