@@ -24,22 +24,23 @@
     <div>
         <h3>Samples</h3>
         <div id="samples" class="samples"></div>
-        <button class="RandomButton" onclick="btnRandom()">RANDOM</button>
+        <button class="btn btn-primary" onclick="btnRandom()">RANDOM</button>
     </div>
     
     <div style="margin-left: 10px;">
         <div style="width: 80px;">
-            <h3>Input</h3>
+            <h3 style="margin-left: 15px;">Input</h3>
             <div id="input" class="input">
                 <div id = "sha" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
                 <div id = "det" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
                 <div id = "col" class = sub_input ondragover="allowDrop(event)" ondrop="drop(event)"></div>
             </div>
         </div>
-        <button class="myButton"
+        <!--button class="myButton "
             style="margin-top: 15px; border-radius: 0px; margin-left: 0;
             background: crimson; box-shadow: none; text-shadow: none; background-color: crimson; width: 80px; font-size: small;"
-            onclick="btnSubmit()">
+            onclick="btnSubmit()"-->
+        <button id="myButton" class="btn btn-primary" onclick="btnSubmit()">
             GENERATE
         </button>
     </div>

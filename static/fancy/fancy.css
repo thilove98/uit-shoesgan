@@ -72,7 +72,17 @@ div.samples {
     overflow-x: auto;
     white-space: nowrap;
 }
+
+.btn-primary {
+    margin: 0 auto;
+    display: block;
+    margin-top: 10px;
+    background-color: red;
+}
 .input{
+    margin: 0 auto;
+    display: block;
+    margin-left: 10px;
     width: 80px;
     height: 240px;
 }
