@@ -2,6 +2,7 @@ import os
 import random
 import pickle
 import wget
+import json
 import gdown
 import torch
 import numpy as np
@@ -29,7 +30,7 @@ seed_everything(SEED)
 def load_model(model_path='model.pt'):
     if not os.path.exists(model_path):
         # model kaggle 512 transfer
-        url_model = 'https://www.kaggleusercontent.com/kf/38674976/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..lSr-Ys6CHHJw9sCJutEwOA.F7nobtYD4y_M2ONtUFVaiQsQQbuxFhRLtjRxEPiNx8AuIMigztl1B4r3xKeLPhQlC3Zt8fvEUb8e2K8SWSu3HSjAYDhedWlIg7YBGclX7yBi1xutu2gK_N7zovv2smJ1syU9OreCj4nZmyW_gAUxoKS63uNEYMiq-nEG-7ydM7O2kYGig5kDHHTbasGhqMsO3_JtKtgqf9ngt7vrfhQ9jGxXw2FmWMm_pvqJn_eR3ICELRoQe4o7HZ_46g0gnRkidMYajY6_3dYw1Ddn_MMpnDhKKousqqamOq0X_T_YbCw_XWwCVpJD-GQ3GrGMfp20htAIcwJB_tYvizXz-7k6hhe43aX64FeOF084e1Zb6wsqoYvnRBWxrRF0rmwBbOvOJjEgUy0bku8fHWN07NfpPtM1JusijHaRi2CfLaA9M-tYEhq6Vf_kcJ3SvpvxlkMy27mgY4lWWWsksd4HZKgm-O8WHWsaSDgVKPIFYh-7X_RWpLbN-xzhytjeoXrSOva-39ljMO8VBgwFCwc_d6bfb6BlVNcLPUkKcrxi7BQmQ41Oz7Bpqr7KnoNuCSQegzyL19ihS7GSA6lLBxTPh27oc-5QuH2svo0hsP5rBaHGiAKLUqqkW1WaOvMzYIw-p0mEvnh1sGoEN7jWETq1yPk2UQ.NMNoGsbv5CAj35rx33x_uw/checkpoint/039390.pt'
+        url_model = 'https://www.kaggleusercontent.com/kf/38674976/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..VX2ODnfS19mlPVAq4XX-aw.53RrqpKZ-DGobTBubGJ1qdrTs5Y23Xnj6Hu50c-YY4JFQTFzJRGgHV4d4sF632Jc4E4bDnQSfrBR936i8LclblbeZjO2ILfEbcIOJamzmV8aFR5P9NXyNBWm8IgAkrKYDFuJTkiUXhYB9Ymv_k-vfND5FwaKspg9Qz_9J64Q06HjeV6Jf6HLLL9xP77pJvHfOOtISq-qqhDyM7tT_jRFeC_UPNv13rVZXufddbAt-wcl2XJQHTFZl58lpElLYEdX7eoY8NE8uk2jy-2XrP4fdliHZhcLOUqCAn3N83Ah-ifKayAXToQpFtLA8Bd99gymzrG1R9wA_7up2PjDsWcJepxlVVNMAc8xRmm7SIf4LUeTETCXgUyi3lM9mQf6dTBsBlucGanl4Z3rWc4xEkxBAR7KHTnmw4EHW2xnVsrB0Ol0ofmLbE9Y5xfzPpOsejNDSK7fs8WXJgqFCOiWnZrOtr6SqRqPNQP1PVpCC0-BymmrLnU0kI1JxLpozUN2Yh0KPQVpTbj5e4RcDhh6x9E9TjByE4PYzGdZ6FocTkocZjGLTDe-lX7lOjyk29CUUX2v50pQWR8UAJWeItvs_ZG4Cw0yIZQFYP13RBA7aq4igHC3UqQ06iw27tqy92qg2jLsxLWyT-93OxbHXn2NZqBd3A.syPxTVHCFuoZwemx1R6ubg/checkpoint/039390.pt'
         wget.download(url_model, out=model_path)
     checkpoint = torch.load(model_path)
 
@@ -47,10 +48,24 @@ def load_latents(latents_path='latents512.pkl'):
         latents = pickle.load(f)
     return latents
 
+def load_labels(labels_path='labels.json'):
+    labels = {}
+    all_keys = []
+
+    with open(labels_path, 'r') as f:
+        labels = json.load(f)
+    for value in labels.values():
+        for key in value.keys():
+            if key not in all_keys:
+                all_keys.append(key)
+
+    return labels, all_keys
+
 MODEL = load_model()
 LATENTS = load_latents()
 
 ## fake label for testing
+LABELS, ALL_KEYS = load_labels()
 LABELS = np.random.randint(0, len(LATENTS), size=len(LATENTS))
 
 @torch.no_grad()
