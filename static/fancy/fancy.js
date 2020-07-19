@@ -1,10 +1,6 @@
 //labels = ['Boat Shoes', 'Boots', 'Clogs & Mules', 'Crib Shoes', 'Flats', 'Heels', 'Loafers', 'Oxfords', 'Sandals', 'Slippers', 'Sneakers & Athletic Shoes']
 //labels = ['black', 'blue', 'boots', 'brown', 'buckle', 'clog', 'flats', 'gray', 'heel', 'high', 'lace', 'low', 'middle', 'normal', 'oxford', 'pink', 'red', 'sandal', 'sandle', 'slipper', 'sneaker', 'sneakers', 'strap', 'white', 'yellow', 'zipper']
-<<<<<<< HEAD
-labels = ['Boat Shoes', 'Boots', 'Clogs & Mules', 'Crib Shoes', 'Flats', 'Heels', 'Loafers', 'Oxfords', 'Sandals', 'Slippers', 'Sneakers & Athletic Shoes']//, 'boy', 'general', 'girl', 'kid', 'men', 'women']
-=======
 labels = ['Boat Shoes', 'Boots', 'Clogs & Mules', 'Crib Shoes', 'Flats', 'Heels', 'Loafers', 'Oxfords', 'Sandals', 'Slippers', 'Sneakers & Athletic Shoes']
->>>>>>> 29b69a43f0aa369b87518e2c3d8b929381ae47fd
 imgCode = {}
 styles = {
     "sha": "",
