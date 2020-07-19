@@ -35,6 +35,17 @@ function addSample(src, name=""){
     tempImg.onload = function(){
         document.getElementById("samples").appendChild(tempImg)
     }
+    tempImg.ondblclick = async function(){
+        conOut = document.getElementById('output1')
+        conOut.innerHTML = ""
+        let temp = document.createElement("img")
+        temp.src = this.src
+        temp.width = 400 - 6
+        temp.height = 400 - 6
+        temp.onload = function(){
+            conOut.appendChild(temp)
+        }
+    }
 }
 function allowDrop(event){
     event.preventDefault();

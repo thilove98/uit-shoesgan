@@ -29,6 +29,7 @@ h3{
     font-family: Arial;
 }
 .main_div{
+    margin: auto;
     display: flex;
     margin-left: 10px;
     background-color: #fff;
