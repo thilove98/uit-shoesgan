@@ -70,7 +70,6 @@ LATENTS = load_latents()
 ## fake label for testing
 LABELS, ALL_LABELS = load_labels()
 print(ALL_LABELS)
-LABELS = np.random.randint(0, len(LATENTS), size=len(LATENTS))
 
 @torch.no_grad()
 def style_to_image(style1, style2, style3, model=MODEL):
