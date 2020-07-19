@@ -36,7 +36,7 @@
     "00041": {"type": "flats", "color": "pink", "height": "low", "buckle": true},
     "00042": {"type": "sneakers", "color": "gray", "height": "middle", "lace": true},
     "00043": {"type": "clog", "color": "gray", "height": "low"},
-    "00044": {"type": "boots", "color": "gray", "height": "height", "lace": true},
+    "00044": {"type": "boots", "color": "gray", "height": "high", "lace": true},
     "00047": {"type": "oxford", "color": "brown", "height": "middle"}
 
 

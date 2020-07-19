@@ -133,7 +133,15 @@ def get_style_from_label(labels, model=MODEL):
         output:
         - a numpy array of vector styles with shape:
     """
-    labels = np.array(labels)
+
+    name = ALL_LABELS[labels[0]]
+    results = []
+    for key, value in LABELS.items():
+        for k, v in value.items():
+            if k == name or v == name:
+                results.append(int(key))
+    results = random.sample(results, len(results))
+    labels = np.array(results[: len(labels)])
     latents = LATENTS[labels]
     return latents
 
