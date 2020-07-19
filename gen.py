@@ -50,22 +50,26 @@ def load_latents(latents_path='latents512.pkl'):
 
 def load_labels(labels_path='labels.json'):
     labels = {}
-    all_keys = []
+    all_labels = []
 
     with open(labels_path, 'r') as f:
         labels = json.load(f)
     for value in labels.values():
-        for key in value.keys():
-            if key not in all_keys:
-                all_keys.append(key)
-
-    return labels, all_keys
+        for k, v in value.items():
+            if v == True:
+                item = k
+            else:
+                item = v
+            if item not in all_labels:
+                all_labels.append(item)
+    return labels, sorted(all_labels)
 
 MODEL = load_model()
 LATENTS = load_latents()
 
 ## fake label for testing
-LABELS, ALL_KEYS = load_labels()
+LABELS, ALL_LABELS = load_labels()
+print(ALL_LABELS)
 LABELS = np.random.randint(0, len(LATENTS), size=len(LATENTS))
 
 @torch.no_grad()

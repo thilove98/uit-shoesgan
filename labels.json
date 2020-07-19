@@ -11,7 +11,7 @@
     "00009": {"type": "heel", "color": "black", "height": "high", "strap": true},
     "00010": {"type": "sandle", "color": "gray", "height": "low"},
     "00011": {"type": "slipper", "color": "gray", "height": "low"},
-    "00012": {"type": "boots", "color": "brown", "height": "highG", "lace": true},
+    "00012": {"type": "boots", "color": "brown", "height": "high", "lace": true},
     "00013": {"type": "sandal", "color": "black", "height": "low", "strap": true},
     "00014": {"type": "clog", "color": "red", "height": "middle"},
     "00015": {"type": "heel", "color": "yellow", "height": "middle"},   
