@@ -142,8 +142,7 @@ function load(){
         btn.id = i.toString();
         btn.className = "myButton"
         btn.onclick = async function(){
-            let label = parseInt(this.id)
-            data = await getVectorsByLabels([label, label, label, label])
+            data = await getVectorsByLabels([labels[i], labels[i], labels[i], labels[i]])
             vectors = data.vectors
             for(let i = 0; i<vectors.length;i++){
                 data = await getImageByVectors(vectors[i], vectors[i], vectors[i])
