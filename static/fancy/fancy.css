@@ -78,7 +78,29 @@ div.samples {
     display: block;
     margin-top: 10px;
     background-color: red;
+    border: none;
 }
+.btn-primary:enabled{
+    background-color: red;
+    border: none;
+}
+.btn-primary:visited{
+    color: black;
+    border: none;
+    outline: none;
+}
+.btn-primary:focus{
+    border: none;
+    outline: none;
+    border-color: black;
+}
+.btn-primary:active {
+    color: black;
+    border: none;
+    outline: none;
+}
+
+
 .input{
     margin: 0 auto;
     display: block;
