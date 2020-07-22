@@ -53,12 +53,15 @@ def load_labels(labels_path='labels.json'):
         labels = json.load(f)
     return labels
 
+def load_predefined_styles(styles_path=os.path.join("styles-predefined", "styles-predefined.json")):
+    with open(styles_path, 'r') as f:
+        styles = json.load(f)
+    return styles
+
 MODEL = load_model()
 LATENTS = load_latents()
-
-## fake label for testing
 LABELS = load_labels()
-print(LABELS.keys())
+STYLES = load_predefined_styles()
 
 @torch.no_grad()
 def style_to_image(style1, style2, style3, model=MODEL):
@@ -113,21 +116,12 @@ def get_random_images(inputs=[-1, -1, 2], model=MODEL):
         results.append(item)
     return results
 
-@torch.no_grad()
-def get_style_from_label(labels, model=MODEL):
-    #TODO rewrite this
-    """input:
-        - labels: a list of labels, i.e [1, 2, 3]
-        output:
-        - a numpy array of vector styles with shape:
-    """
+def get_style_from_label(labels):
     name = labels[0]
-
     results = LABELS[name]
     labels = random.sample(results, len(labels))
     labels = np.array(labels)
     latents = LATENTS[labels]
-
     return latents
 
 @torch.no_grad()
@@ -140,6 +134,16 @@ def get_style_from_random(n_samples, model=MODEL):
     latent_z = torch.randn(n_samples, LATENT_SIZE).to(DEVICE)
     latent_w = model.get_latent(latent_z)
     return latent_w.cpu().numpy()
+
+def get_style_from_index():
+    latents = []
+    styles = []
+    levels = []
+    for x in STYLES:
+        latents.append(LATENT[x["id"]])
+        styles.append(x["name"])
+        levels.append(x["level"])
+    return latents, styles, levels
 
 @torch.no_grad()
 def get_images_from_styles(style1, style2, style3, weight=0.8, model=MODEL, multi_output=False):
@@ -155,6 +159,32 @@ def get_images_from_styles(style1, style2, style3, weight=0.8, model=MODEL, mult
     styles = []
     assert 0.0 <= weight <= 1.0
     style2 = (1 - weight) * style1 + weight * style2
+    for i, style in enumerate([style1, style2, style3]):
+        style = torch.tensor(style, device=DEVICE)
+        style = style.repeat(LEVELS[i], 1)
+        styles.append(style)
+    styles = torch.cat(styles, 0).unsqueeze(0)
+    img, _ = model([styles], input_is_latent=True)
+    img = img.cpu()
+    img = transforms.ToPILImage()(img[0].clamp_(-1, 1).add_(1).div_(2 + 1e-5)).convert('RGB')
+    return img
+
+@torch.no_grad()
+def get_images_from_styles_mixing(input_style, mix_style, weight=0.8, model=MODEL, level=1):
+    style1 = np.array(input_style, dtype=np.float32)
+    style2 = np.array(input_style, dtype=np.float32)
+    style3 = np.array(input_style, dtype=np.float32)
+
+
+    styles = []
+    assert 0.0 <= weight <= 1.0
+    if level == 1:
+        style1 = (1 - weight) * input_style + weight * mix_style
+    elif level == 2:
+        style2 = (1 - weight) * input_style + weight * mix_style
+    else:
+        style3 = (1 - weight) * input_style + weight * mix_style
+
     for i, style in enumerate([style1, style2, style3]):
         style = torch.tensor(style, device=DEVICE)
         style = style.repeat(LEVELS[i], 1)

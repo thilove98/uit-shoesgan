@@ -12,7 +12,7 @@ import struct
 import io
 import string
 
-app = Flask(__name__, template_folder='static/fancy')
+app = Flask(__name__, template_folder='static/fancy2')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 def img2str(img):
@@ -28,6 +28,15 @@ def stl2img():
     detail = np.array(data['Detail'])
     color = np.array(data['Color'])
     img = get_images_from_styles(shape, detail, color)
+    return jsonify({"image": img2str(img)})
+
+@app.route("/get_images_from_styles_mixing", methods=['POST', 'GET'])
+def stlm2img():
+    data = request.json
+    input_style = np.array(data['input_style'])
+    mix_style = np.array(data['mix_style'])
+    weight = data['weight']
+    img = get_images_from_styles_mixing(input_style, mix_style, weight=weight)
     return jsonify({"image": img2str(img)})
 
 @app.route("/get_style_from_label", methods=['POST', 'GET'])
@@ -47,9 +56,16 @@ def rnd2stl():
     vectors = [[float(i) for i in vector] for vector in vectors]
     return jsonify({"vectors": vectors})
 
+@app.route("/load_predefined_styles", methods=['GET'])
+def load_predefined_styles():
+    latents, styles, levels = get_style_from_index()
+    latents = [[float(i) for i in latent] for latent in latents]
+    return jsonify({"vectors": latents, "styles": styles, "levels": levels})
+
 @app.route("/", methods=['POST', 'GET'])
 def home():
     return render_template("fancy.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
