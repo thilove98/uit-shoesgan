@@ -92,8 +92,8 @@ async function getVectorsByLabels(labels){
     });
 }
 
-async function getImageByVectors(shape, detail, color){
-    var formData = JSON.stringify({"Shape": shape, "Detail": detail, "Color": color});
+async function getImageByVectors(vectors){
+    var formData = JSON.stringify({"vectors": vectors});
     return await $.ajax({
         type: "POST",
         url: url + "/get_images_from_styles",
@@ -106,8 +106,8 @@ async function getImageByVectors(shape, detail, color){
     });
 }
 
-async function getImageByMixing(input_style, mix_style, weight) {
-    var formData = JSON.stringify({"input_style": input_style, "mix_style": mix_style, "weight": weight});
+async function getImageByMixing(input_style, mix_style, weight, level) {
+    var formData = JSON.stringify({"input_style": input_style, "mix_style": mix_style, "weight": weight, "level": level});
     return await $.ajax({
         type: "POST",
         url: url + "/get_images_from_styles_mixing",
@@ -139,9 +139,9 @@ async function btnRandom() {
     data = await getRandomImages(num_images);
     vectors = data.vectors    
     for (let i=0; i<num_images; ++i) {
-        data = await getImageByVectors(vectors[i], vectors[i], vectors[i]);
+        data = await getImageByVectors([vectors[i], vectors[i], vectors[i]]);
         name = makeid(10);
-        imgCode[name] = vectors[i];
+        imgCode[name] = [vectors[i], vectors[i], vectors[i]];
         addSample("data:image/jpeg;base64," + data.image, name);
     }
 }
@@ -196,9 +196,9 @@ function load(){
             data = await getVectorsByLabels([labels[i]])
             vectors = data.vectors;
             for(let i = 0; i<vectors.length;i++){
-                data = await getImageByVectors(vectors[i], vectors[i], vectors[i]);
+                data = await getImageByVectors([vectors[i], vectors[i], vectors[i]]);
                 name = makeid(10);
-                imgCode[name] = vectors[i];
+                imgCode[name] = [vectors[i], vectors[i], vectors[i]];
                 addSample("data:image/jpeg;base64," + data.image, name);
             }
         }
@@ -232,15 +232,16 @@ function addStyle(src, name, style_name, level) {
         outcanvas.innerHTML = "";
 
         for (let i=0; i<NUM_OUTPUT_IMAGES; i++) {
-            let weight = (i + 1) / NUM_OUTPUT_IMAGES;
+            let weight = (i + 1) / 2;
             if (canvas.hasChildNodes) {
                 input_img = canvas.childNodes[0];
                 data = await getImageByMixing(imgCode[input_img.name], imgCode[img.name], weight, level);
                 outputImg = document.createElement("img");
                 name = makeid(10);
                 outputImg.name = name;
+                imgCode[name] = data.vectors;
                 outputImg.src = "data:image/jpeg;base64," + data.image;
-                let size = min(outcanvas.offsetHeight, outcanvas.offsetWidth) / Math.sqrt(NUM_OUTPUT_IMAGES) - 1.5
+                let size = Math.min(outcanvas.offsetHeight, outcanvas.offsetWidth) / Math.sqrt(NUM_OUTPUT_IMAGES) - 1.5
                 outputImg.width = size;
                 outputImg.height = size;
                 
@@ -248,8 +249,8 @@ function addStyle(src, name, style_name, level) {
                     outcanvas.appendChild(outputImg);
                 }
                 outputImg.ondblclick = async function() {
-                    console.log("haha");
                     addSample(this.src, this.name);
+
                 }
             }
         }
@@ -263,10 +264,10 @@ function loadStyleList() {
     levels = style_data.levels;
 
     for (let i=0; i<vectors.length; i++) {
-        data = getImageByVectors(vectors[i], vectors[i], vectors[i]);
+        data = getImageByVectors([vectors[i], vectors[i], vectors[i]]);
 
         name = makeid(10);
-        imgCode[name] = vectors[i];
+        imgCode[name] = [vectors[i], vectors[i], vectors[i]];
 
         Promise.resolve(data).then(function(value) {
             src = "data:image/jpeg;base64," + value.image;

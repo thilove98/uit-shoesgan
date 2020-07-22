@@ -146,20 +146,19 @@ def get_style_from_index():
     return latents, styles, levels
 
 @torch.no_grad()
-def get_images_from_styles(style1, style2, style3, weight=0.8, model=MODEL, multi_output=False):
+def get_images_from_styles(vectors, weight=0.8, model=MODEL, multi_output=False):
     """input:
         - style1, style2, style3 : vector with shape (320,)
         output:
         - image with size 512x512
     """
-    style1 = np.array(style1, dtype=np.float32)
-    style2 = np.array(style2, dtype=np.float32)
-    style3 = np.array(style3, dtype=np.float32)
+    style1 = np.array(vectors[0], dtype=np.float32)
+    style2 = np.array(vectors[1], dtype=np.float32)
+    style3 = np.array(vectors[2], dtype=np.float32)
 
+    vectors = np.array(vectors, dtype=np.float32)
     styles = []
-    assert 0.0 <= weight <= 1.0
-    style2 = (1 - weight) * style1 + weight * style2
-    for i, style in enumerate([style1, style2, style3]):
+    for i, style in enumerate(vectors):
         style = torch.tensor(style, device=DEVICE)
         style = style.repeat(LEVELS[i], 1)
         styles.append(style)
@@ -171,14 +170,13 @@ def get_images_from_styles(style1, style2, style3, weight=0.8, model=MODEL, mult
 
 @torch.no_grad()
 def get_images_from_styles_mixing(input_style, mix_style, weight=0.8, model=MODEL, level=1):
-    style1 = np.array(input_style, dtype=np.float32)
-    style2 = np.array(input_style, dtype=np.float32)
-    style3 = np.array(input_style, dtype=np.float32)
-
+    style1 = np.array(input_style[0], dtype=np.float32)
+    style2 = np.array(input_style[1], dtype=np.float32)
+    style3 = np.array(input_style[2], dtype=np.float32)
 
     styles = []
 
-    new_style = (input_style + weight * mix_style) / (weight + 1)
+    new_style = (input_style[level-1] + weight * mix_style[level-1]) / (weight + 1)
     new_style = np.array(new_style, dtype=np.float32)
     if level == 1:
         style1 = new_style
@@ -195,5 +193,5 @@ def get_images_from_styles_mixing(input_style, mix_style, weight=0.8, model=MODE
     img, _ = model([styles], input_is_latent=True)
     img = img.cpu()
     img = transforms.ToPILImage()(img[0].clamp_(-1, 1).add_(1).div_(2 + 1e-5)).convert('RGB')
-    return img
+    return img, [styles1, style2, style3]
 

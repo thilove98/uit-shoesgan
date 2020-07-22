@@ -24,10 +24,8 @@ def img2str(img):
 @app.route("/get_images_from_styles", methods=['POST', 'GET'])
 def stl2img():
     data = request.json
-    shape = np.array(data['Shape'])
-    detail = np.array(data['Detail'])
-    color = np.array(data['Color'])
-    img = get_images_from_styles(shape, detail, color)
+    vectors = data['vectors']
+    img = get_images_from_styles(vectors)
     return jsonify({"image": img2str(img)})
 
 @app.route("/get_images_from_styles_mixing", methods=['POST', 'GET'])
@@ -37,8 +35,11 @@ def stlm2img():
     mix_style = np.array(data['mix_style'])
     weight = data['weight']
     level = data['level']
-    img = get_images_from_styles_mixing(input_style, mix_style, weight=weight, level=level)
-    return jsonify({"image": img2str(img)})
+    img, vectors = get_images_from_styles_mixing(input_style, mix_style, weight=weight, level=level)
+
+    vectors = [[float(i) for i in vector] for vector in vectors]
+
+    return jsonify({"image": img2str(img), "vectors": vectors})
 
 @app.route("/get_style_from_label", methods=['POST', 'GET'])
 def lal2stys():
