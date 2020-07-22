@@ -140,8 +140,8 @@ def get_style_from_index():
     styles = []
     levels = []
     for x in STYLES:
-        latents.append(LATENT[x["id"]])
-        styles.append(x["name"])
+        latents.append(LATENTS[x["id"]])
+        styles.append(x["style"])
         levels.append(x["level"])
     return latents, styles, levels
 
@@ -177,13 +177,15 @@ def get_images_from_styles_mixing(input_style, mix_style, weight=0.8, model=MODE
 
 
     styles = []
-    assert 0.0 <= weight <= 1.0
+
+    new_style = (input_style + weight * mix_style) / (weight + 1)
+    new_style = np.array(new_style, dtype=np.float32)
     if level == 1:
-        style1 = (1 - weight) * input_style + weight * mix_style
+        style1 = new_style
     elif level == 2:
-        style2 = (1 - weight) * input_style + weight * mix_style
+        style2 = new_style
     else:
-        style3 = (1 - weight) * input_style + weight * mix_style
+        style3 = new_style
 
     for i, style in enumerate([style1, style2, style3]):
         style = torch.tensor(style, device=DEVICE)

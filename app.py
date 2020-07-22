@@ -36,7 +36,8 @@ def stlm2img():
     input_style = np.array(data['input_style'])
     mix_style = np.array(data['mix_style'])
     weight = data['weight']
-    img = get_images_from_styles_mixing(input_style, mix_style, weight=weight)
+    level = data['level']
+    img = get_images_from_styles_mixing(input_style, mix_style, weight=weight, level=level)
     return jsonify({"image": img2str(img)})
 
 @app.route("/get_style_from_label", methods=['POST', 'GET'])

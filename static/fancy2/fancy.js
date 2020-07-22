@@ -30,8 +30,10 @@ function addSample(src, name=""){
     tempImg.src = src;
     tempImg.name = name;
     tempImg.id = name;
-    tempImg.width = canvas.offsetWidth - 3;
-    tempImg.height = canvas.offsetHeight - 3;
+
+    let size = Math.min(canvas.offsetHeight, canvas.offsetWidth);
+    tempImg.width = size - 3;
+    tempImg.height = size - 3;
     tempImg.draggable = true;
     tempImg.ondragstart = function(event){
         focusId = event.target.id;
@@ -204,7 +206,7 @@ function load(){
     }
 }
 
-function addStyle(src, name, style_name) {
+function addStyle(src, name, style_name, level) {
     let img_div = document.createElement("div");
     img_div.id = "style_pick";
     let text = document.createElement("span");
@@ -233,13 +235,14 @@ function addStyle(src, name, style_name) {
             let weight = (i + 1) / NUM_OUTPUT_IMAGES;
             if (canvas.hasChildNodes) {
                 input_img = canvas.childNodes[0];
-                data = await getImageByMixing(imgCode[input_img.name], imgCode[img.name], weight);
+                data = await getImageByMixing(imgCode[input_img.name], imgCode[img.name], weight, level);
                 outputImg = document.createElement("img");
                 name = makeid(10);
                 outputImg.name = name;
                 outputImg.src = "data:image/jpeg;base64," + data.image;
-                outputImg.width = Math.floor(outcanvas.offsetWidth / Math.sqrt(NUM_OUTPUT_IMAGES)) - 1.5;
-                outputImg.height = Math.floor(outcanvas.offsetHeight / Math.sqrt(NUM_OUTPUT_IMAGES)) - 1.5;
+                let size = min(outcanvas.offsetHeight, outcanvas.offsetWidth) / Math.sqrt(NUM_OUTPUT_IMAGES) - 1.5
+                outputImg.width = size;
+                outputImg.height = size;
                 
                 outputImg.onload = function() {
                     outcanvas.appendChild(outputImg);
