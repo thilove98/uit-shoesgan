@@ -1,5 +1,13 @@
 [
     {"id": 11, "style": "gray dot", "level": 3},
-    {"id": 28, "style": "high", "level": 1},
-    {"id": 51, "style": "low", "level": 1}
+    {"id": 84, "style": "high", "level": 1},
+    {"id": 1, "style": "blue", "level": 3},
+    {"id": 12, "style": "lace", "level": 2},
+    {"id": 87, "style": "grid", "level": 2},
+    {"id": 93, "style": "low", "level": 1},
+    {"id": 105, "style": "white", "level": 3},
+    {"id": 128, "style": "zipper", "level": 2},
+    {"id": 132, "style": "straps", "level": 2}
+
+
 ]

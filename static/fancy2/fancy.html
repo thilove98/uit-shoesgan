@@ -4,15 +4,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='fancy2/fancy.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <title>UIT Shoes Generator</title>
     <link rel="shortcut icon" href="https://tuyensinh.uit.edu.vn/favicon.ico" type="image/x-icon">
 </head>
 <body id="body">
-    <div class="jumbotron">
+    <div id="project-name" class="jumbotron">
         <div class="container-fluid">
-        <h1>GENERATING SHOES DESIGNS USING GAN</h1>
+            <h4>SHOES GENERATOR</h4>
         </div>
     </div>
 
@@ -29,10 +30,18 @@
             <div class="col-lg-2">
                 <div id="tags_type" class="btn-lg"></div>
             </div>
-            <div class="col-lg-5 text-center">
-                <div id="samples" class="output"></div>
-                <button class="btn btn-danger" onclick="btnRandom()">RANDOM</button>
-                <button class="btn btn-danger" onclick="btnBack()">BACK</button>
+            <div class="col-lg-5">
+                <div class="myOutput">
+                    <button class="btn btn-danger" onclick="btnBack()">
+                        <i class="fa fa-arrow-left"></i>
+                        BACK
+                    </button>
+                    <button class="btn btn-danger" onclick="btnRandom()">
+                        <i class="fa fa-rotate-right"></i>
+                        RANDOM
+                    </button>
+                    <div id="samples" class="output"></div>
+                </div>
             </div>
             <div class="col-lg-5">
                 <div id="output1">
@@ -41,10 +50,12 @@
             </div>
         </div>
     </div>
-
-    <div class="container-fluid">
-        <div id="style-list" class="row"></div>
+    <div id="styles-picker" class="jumbotron">
+        <div class="container-fluid">
+            <div id="style-list" class="row"></div>
+        </div>
     </div>
+
 </body>
 
 <script src="static/fancy2/fancy.js"></script>

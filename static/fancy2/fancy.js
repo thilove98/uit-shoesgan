@@ -218,8 +218,8 @@ function addStyle(src, name, style_name, level) {
     img.name = name;
     img.id = "style_img";
  
-    img.width = 100;
-    img.height = 100;
+    img.width = 120;
+    img.height = 120;
     img.onload = function() {
         img_div.appendChild(text);
         img_div.appendChild(img);
@@ -237,9 +237,11 @@ function addStyle(src, name, style_name, level) {
                 input_img = canvas.childNodes[0];
                 data = await getImageByMixing(imgCode[input_img.name], imgCode[img.name], weight, level);
                 outputImg = document.createElement("img");
+                outputImg.id = "output_imgs";
                 name = makeid(10);
                 outputImg.name = name;
                 imgCode[name] = data.vectors;
+
                 outputImg.src = "data:image/jpeg;base64," + data.image;
                 let size = Math.min(outcanvas.offsetHeight, outcanvas.offsetWidth) / Math.sqrt(NUM_OUTPUT_IMAGES) - 1.5
                 outputImg.width = size;
@@ -274,7 +276,6 @@ function loadStyleList() {
             addStyle(src, name, styles[i], levels[i]);
 
         });
-
 
 
     }
