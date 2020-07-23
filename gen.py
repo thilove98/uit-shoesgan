@@ -176,15 +176,19 @@ def get_images_from_styles_mixing(input_style, mix_style, weight=0.8, model=MODE
 
     styles = []
 
-    new_style = (input_style[level-1] + weight * mix_style[level-1]) / (weight + 1)
-    new_style = np.array(new_style, dtype=np.float32)
-    if level == 1:
-        style1 = new_style
-    elif level == 2:
-        style2 = new_style
+    if level <= 3:
+        new_style = (input_style[level-1] + weight * mix_style[level-1]) / (weight + 1)
+        new_style = np.array(new_style, dtype=np.float32)
+        if level == 1:
+            style1 = new_style
+        elif level == 2:
+            style2 = new_style
+        elif level == 3:
+            style3 = new_style
     else:
-        style3 = new_style
-
+        style1 = (input_style[0] + weight * mix_style[0]) / (weight + 1)
+        style2 = (input_style[1] + weight * mix_style[1]) / (weight + 1)
+    
     for i, style in enumerate([style1, style2, style3]):
         style = torch.tensor(style, device=DEVICE)
         style = style.repeat(LEVELS[i], 1)

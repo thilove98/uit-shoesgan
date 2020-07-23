@@ -7,7 +7,9 @@
     {"id": 93, "style": "low", "level": 1},
     {"id": 105, "style": "white", "level": 3},
     {"id": 128, "style": "zipper", "level": 2},
-    {"id": 132, "style": "straps", "level": 2}
+    {"id": 132, "style": "straps", "level": 2},
+    {"id": 150, "style": "lace", "level": 1},
+    {}
 
 
 ]
