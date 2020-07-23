@@ -269,11 +269,10 @@ function loadStyleList() {
     for (let i=0; i<vectors.length; i++) {
         data = getImageByVectors([vectors[i], vectors[i], vectors[i]]);
 
-        name = makeid(10);
-        imgCode[name] = [vectors[i], vectors[i], vectors[i]];
-
         Promise.resolve(data).then(function(value) {
             src = "data:image/jpeg;base64," + value.image;
+            name = makeid(10);
+            imgCode[name] = [vectors[i], vectors[i], vectors[i]];
             addStyle(src, name, styles[i], levels[i]);
 
         });
