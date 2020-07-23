@@ -2,7 +2,7 @@
 //labels = ['black', 'blue', 'boots', 'brown', 'buckle', 'clog', 'flats', 'gray', 'heel', 'high', 'lace', 'low', 'middle', 'normal', 'oxford', 'pink', 'red', 'sandal', 'sandle', 'slipper', 'sneaker', 'sneakers', 'strap', 'white', 'yellow', 'zipper']
 labels = ['Boat Shoes', 'Boots', 'Clogs & Mules', 'Crib Shoes', 'Flats', 'Heels', 'Loafers', 'Oxfords', 'Sandals', 'Slippers', 'Sneakers & Athletic Shoes'];
 imgCode = {};
-NUM_OUTPUT_IMAGES = 9;
+NUM_OUTPUT_IMAGES = 4;
 prev_imgs = [];
 
 styles = {
@@ -229,9 +229,11 @@ function addStyle(src, name, style_name, level) {
         var canvas = document.getElementById("samples");
         outcanvas = document.getElementById("output1");
         outcanvas.innerHTML = "";
+        let WEIGHT = [1, 2, 3, 100000000]
 
         for (let i=0; i<NUM_OUTPUT_IMAGES; i++) {
-            let weight = (i + 1) / 2;
+            let weight = WEIGHT[i];
+            //let weight = (i + 1) / 2;
             if (canvas.hasChildNodes) {
                 input_img = canvas.childNodes[0];
                 data = await getImageByMixing(imgCode[input_img.name], imgCode[img.name], weight, level);
