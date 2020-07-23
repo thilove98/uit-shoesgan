@@ -188,6 +188,8 @@ def get_images_from_styles_mixing(input_style, mix_style, weight=0.8, model=MODE
     else:
         style1 = (input_style[0] + weight * mix_style[0]) / (weight + 1)
         style2 = (input_style[1] + weight * mix_style[1]) / (weight + 1)
+        style1 = np.array(style1, dtype=np.float32)
+        style2 = np.array(style2, dtype=np.float32)
     
     for i, style in enumerate([style1, style2, style3]):
         style = torch.tensor(style, device=DEVICE)

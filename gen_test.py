@@ -23,7 +23,7 @@ def get_style_from_label(labels, model=None):
 def get_style_from_random(n_samples, model=None):
     return [[i ,i ,i ,i*2, i*2] for i in range(n_samples)]
 
-def get_images_from_styles(style1, style2, style3, model=None):
+def get_images_from_styles(vectors, model=None):
     """input:
         - style1, style2, style3 : vector with shape (320,)
         output:
@@ -31,3 +31,20 @@ def get_images_from_styles(style1, style2, style3, model=None):
     """
     img = Image.new("RGB", (512, 512), (random.randint(0, 254), random.randint(0, 254), random.randint(0, 254)))
     return img
+
+def get_images_from_styles_mixing(input_style, mix_style, weight, model=None):
+    img = Image.new("RGB", (512, 512), (random.randint(0, 254), random.randint(0, 254), random.randint(0, 254)))
+    return img
+   
+def get_style_from_index():
+
+    import json
+    with open("styles-predefined/styles-predefined.json", 'r') as f:
+        r = json.load(f)
+
+    styles = [d["style"] for d in r]
+    latents = [[1] for _ in range(len(styles))]
+    levels = [1 for _ in range(len(styles))]
+
+    print(styles)
+    return latents, styles, levels

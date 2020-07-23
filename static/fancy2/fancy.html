@@ -27,19 +27,25 @@
     </div-->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-2">
-                <div id="tags_type" class="btn-lg"></div>
+            <div class="col-lg-3">
+                <div class="card bg-dark text-white">
+                    <h5 classs="card-header" style="text-align: center; margin-top: 10px; font-size: 22px;">PICK SHOES</h5>
+                    <div class="card-body">
+                        <div id="tags"> 
+                            <div id="tags_type" class="btn-lg"></div>
+                            <button id="random-button" class="btn btn-primary" onclick="btnRandom()">RANDOM</button>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <div class="myOutput">
                     <button class="btn btn-danger" onclick="btnBack()">
                         <i class="fa fa-arrow-left"></i>
-                        BACK
                     </button>
-                    <button class="btn btn-danger" onclick="btnRandom()">
-                        <i class="fa fa-rotate-right"></i>
-                        RANDOM
-                    </button>
+
                     <div id="samples" class="output"></div>
                 </div>
             </div>

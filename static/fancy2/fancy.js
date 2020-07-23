@@ -191,7 +191,6 @@ function load(){
         btn.id = i.toString();
         btn.type = "button";
         btn.className = "btn btn-primary";
-        btn.style.marginRight = "6px";
         btn.onclick = async function(){
             data = await getVectorsByLabels([labels[i]])
             vectors = data.vectors;
