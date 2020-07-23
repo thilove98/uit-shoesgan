@@ -8,8 +8,10 @@
     {"id": 105, "style": "white", "level": 3},
     {"id": 128, "style": "zipper", "level": 2},
     {"id": 132, "style": "straps", "level": 2},
-    {"id": 150, "style": "lace", "level": 1},
-    {}
-
-
+    {"id": 150, "style": "lace", "level": 4},
+    {"id": 180, "style": "pink", "level": 3},
+    {"id": 203, "style": "high", "level": 4},
+    {"id": 327, "style": "blue", "level": 3},
+    {"id": 536, "style": "pink", "level": 3},
+    {"id": 672, "style": "dot", "level": 3}
 ]
