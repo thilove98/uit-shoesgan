@@ -5,6 +5,8 @@ imgCode = {};
 NUM_OUTPUT_IMAGES = 9;
 prev_imgs = [];
 
+CLICK = false
+
 styles = {
     "sha": "",
     "det": "",
@@ -226,6 +228,10 @@ function addStyle(src, name, style_name, level) {
     }
 
     img.onclick = async function() {
+        if (CLICK == true) {
+            return;
+        }
+        CLICK = true;
         let canvas = document.getElementById("samples");
         let outcanvas = document.getElementById("output1");
         if (outcanvas == null) {
@@ -261,6 +267,7 @@ function addStyle(src, name, style_name, level) {
                 }
             }
         }
+        CLICK = false;
     }
    
 }
