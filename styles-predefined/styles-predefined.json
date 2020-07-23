@@ -2,5 +2,11 @@
     {"id": 1, "style": "blue", "level": 3},
     {"id": 1036, "style": "red", "level": 3},
     {"id": 1109, "style": "low", "level": 1},
-    {"id": 1287, "style": "pink", "level": 3}
+    {"id": 1287, "style": "pink", "level": 3},
+    {"id": 84, "style": "high", "level": 1},
+    {"id": 159, "style": "strap", "level": 2},
+    {"id": 21, "style": "lace", "level": 2},
+    {"id": 3944, "style": "saw", "level": 2},
+    {"id": 4974, "style": "big", "level": 1}
+
 ]
