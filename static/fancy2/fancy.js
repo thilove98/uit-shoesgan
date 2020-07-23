@@ -244,7 +244,7 @@ function addStyle(src, name, style_name, level) {
                 imgCode[name] = data.vectors;
 
                 outputImg.src = "data:image/jpeg;base64," + data.image;
-                let size = Math.min(outcanvas.offsetHeight, outcanvas.offsetWidth) / Math.sqrt(NUM_OUTPUT_IMAGES) - 1.5
+                let size = Math.min(outcanvas.offsetHeight, outcanvas.offsetWidth) / Math.sqrt(NUM_OUTPUT_IMAGES) - 3
                 outputImg.width = size;
                 outputImg.height = size;
                 
