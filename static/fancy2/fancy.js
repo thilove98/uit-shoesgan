@@ -225,13 +225,19 @@ function addStyle(src, name, style_name, level) {
         document.getElementById("style-list").appendChild(img_div);
     }
 
-    img.ondblclick = async function() {
-        var canvas = document.getElementById("samples");
-        outcanvas = document.getElementById("output1");
+    img.onclick = async function() {
+        let canvas = document.getElementById("samples");
+        let outcanvas = document.getElementById("output1");
+        if (outcanvas == null) {
+            outcanvas = document.createElement("div");
+            outcanvas.id = "output1";
+            document.getElementById("list-output").appendChild(outcanvas);
+        }
+
         outcanvas.innerHTML = "";
 
         for (let i=0; i<NUM_OUTPUT_IMAGES; i++) {
-            let weight = (i + 1) * 4 / NUM_OUTPUT_IMAGES;
+            let weight = (i + 1) * 3 / NUM_OUTPUT_IMAGES;
             if (canvas.hasChildNodes) {
                 input_img = canvas.childNodes[0];
                 data = await getImageByMixing(imgCode[input_img.name], imgCode[img.name], weight, level);
@@ -249,7 +255,7 @@ function addStyle(src, name, style_name, level) {
                 outputImg.onload = function() {
                     outcanvas.appendChild(outputImg);
                 }
-                outputImg.ondblclick = async function() {
+                outputImg.onclick = async function() {
                     addSample(this.src, this.name);
 
                 }
