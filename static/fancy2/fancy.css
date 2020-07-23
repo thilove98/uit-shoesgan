@@ -122,17 +122,19 @@ div.samples {
     border-color: #415989;*/
 }
 .myOutput{
-    width: 440px;
-    height: 440px;
+    width: 480px;
+    height: 480px;
     border: solid;
+    margin: 0 auto;
     border-color: #415989;
     background-color: white;
 }
 #output1{
-    width: 440px;
-    height: 440px;
+    width: 480px;
+    height: 480px;
     border: solid;
-    margin-right: 30px;
+    margin: 0 auto;
+    /*margin-right: 30px;*/
     border-color: #415989;
     background-color: white;
 }
@@ -155,8 +157,8 @@ div.samples {
 #styles-picker{
     margin-top: 30px;
     background-color: #333;
-    margin-bottom: 0px;
-    padding: 10px;
+    /*margin-bottom: 100px;*/
+    padding: 30px;
     overflow-x: auto;
     display: flex;
 }
