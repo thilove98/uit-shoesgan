@@ -1,17 +1,6 @@
 [
-    {"id": 11, "style": "gray dot", "level": 3},
-    {"id": 84, "style": "high", "level": 4},
     {"id": 1, "style": "blue", "level": 3},
-    {"id": 12, "style": "lace", "level": 4},
-    {"id": 87, "style": "grid", "level": 4},
-    {"id": 93, "style": "low", "level": 4},
-    {"id": 105, "style": "white", "level": 3},
-    {"id": 128, "style": "zipper", "level": 4},
-    {"id": 132, "style": "straps", "level": 4},
-    {"id": 150, "style": "lace", "level": 4},
-    {"id": 180, "style": "pink", "level": 3},
-    {"id": 203, "style": "high", "level": 4},
-    {"id": 327, "style": "blue", "level": 3},
-    {"id": 536, "style": "pink", "level": 3},
-    {"id": 672, "style": "dot", "level": 3}
+    {"id": 1036, "style": "red", "level": 3},
+    {"id": 1109, "style": "low", "level": 1},
+    {"id": 1287, "style": "pink", "level": 3}
 ]
