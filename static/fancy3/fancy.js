@@ -42,7 +42,18 @@ function create_generated_output() {
 
         let mybutton = document.createElement("button");
         mybutton.className = "btn btn-danger"
-        mybutton.onclick = btnBack();
+        mybutton.onclick = async function {
+            if (prev_imgs.length > 0) {
+                let canvas = document.getElementById("samples");
+                let img = prev_imgs.pop();
+                canvas.innerHTML = "";
+                if (img != null)
+                    canvas.appendChild(img);
+                if (img == null)
+                    document.getElementById("style-region").innerHTML = "";
+                }
+            }
+
         
         let arrow = document.createElement("i");
         arrow.className = "fa fa-arrow-left";
@@ -267,7 +278,7 @@ function load2() {
             dropdown.appendChild(line);
         
         dropdown_item.onclick = async function() {
-            data = await getVectorsByLabels([dropdown_item.id])
+            data = await getVectorsByLabels([this.id])
             vectors = data.vectors;
             for(let i = 0; i<vectors.length;i++){
                 data = await getImageByVectors([vectors[i], vectors[i], vectors[i]]);
@@ -304,14 +315,14 @@ function addStyle(src, name, style_name, level) {
         style_list.appendChild(dropdown_item);
     }
 
-    img.onclick = async function() {
+    dropdown_item.onclick = async function() {
         if (CLICK == true) {
             return;
         }
         CLICK = true;
         let canvas = document.getElementById("samples");
         for (let i=0; i<NUM_OUTPUT_IMAGES; i++) {
-            let weight = (i + 1) * 3 / NUM_OUTPUT_IMAGES;
+            let weight = (i + 9) * 3 / NUM_OUTPUT_IMAGES;
             if (canvas.hasChildNodes) {
                 input_img = canvas.childNodes[0];
                 if (input_img == null) {
