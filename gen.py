@@ -34,7 +34,7 @@ def load_model(model_path='model.pt'):
         #url_model = 'https://www.kaggleusercontent.com/kf/38674976/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..OJtjqngFwft4SmyXyia3-A.pS9DBCBXHMeF9rVs9d-bV61AQnn5GeWBjcY0K09bMJYYPdMfOkQphG4PWqmfjJ0ZNI2ButzTFIrWYZ9-9vqMibjcRAKD1t8Z_NY6NeSsbaviGtj6xAk6i2HHuaLeu0EEbTCnRM0gqQyn-LFJh5gNtQ0yNW7vP1gwG24uO1NQJHfMd6NinuVzR7NPurKnFlE7FsN1Lpl6RtFWjp_SMj0I9Ffkqc7j2L0i6AvSwU6bcJ3sq6eb0eFEmNqIN-Pet6diJvecbRXpLdazYUmUR9wTfXV_61JJjOGQvtxc4GNlzFvGV2onnG-EHJgaEw8dSeXEBg4EPl-xIPIvCiOGbyKpvKWIqi9bSr9E0YXJ_M9DDnP_AZ4P8Tung3slNyKPKfMvOoZhzASmC1S6HDV9I9VtCbnjFV6x8Et3B_K_4OuSR4AWbtn3mJJiEZqJ8ZHO_e3dIf1L8fdCGKb4mAId2uFf0JypXbvoxmOrFUeegUf4YTrTgMo-xgKwKSa_9eUYfImu9RcekUukQJTSK06CPUK26_Nt6_MZjkIx79I-aIfO_ucAT8moP9V3qlhLBwdW1XWHpR6GGbSzFcw-Ht-Y3ae6IWBzUFQQhoJSPSWl1O97J6laDkjE447X-PcuFvdo8kuM.7bHDTamk9Li0dx21JnpK8w/checkpoint/039390.pt'
         #wget.download(url_model, out=model_path)
         url_model = "https://drive.google.com/uc?id=1YS8SRLgphALD4DXBMPAtT0Ku_bCzggkd"
-        gdown.download(url_model, output=model_path, quier=False)
+        gdown.download(url_model, output=model_path, quiet=False)
 
     checkpoint = torch.load(model_path)
 
