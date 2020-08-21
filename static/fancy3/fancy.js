@@ -42,7 +42,7 @@ function create_generated_output() {
 
         let mybutton = document.createElement("button");
         mybutton.className = "btn btn-danger"
-        mybutton.onclick = async function {
+        mybutton.onclick = async function () {
             if (prev_imgs.length > 0) {
                 let canvas = document.getElementById("samples");
                 let img = prev_imgs.pop();
