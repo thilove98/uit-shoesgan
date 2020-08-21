@@ -12,7 +12,7 @@ import struct
 import io
 import string
 
-app = Flask(__name__, template_folder='static/fancy2')
+app = Flask(__name__, template_folder='static/fancy3')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 def img2str(img):

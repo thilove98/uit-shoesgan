@@ -1,0 +1,211 @@
+body{
+    background: #111;
+}
+h3{
+    text-align: center;
+    margin-top: 0px;
+}
+#project-name{
+     /* fills out the jumbotron */
+    background-color: #444;
+    padding-top: 10px;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+}
+#project-name h4 {
+    color: #FFF;
+    font-family: 'Raleway', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+#banner {
+    margin-left: 30px;
+    height: 90px;
+}
+.project_name{
+    text-align: center;
+    color: #263666;
+    font-family: Arial;
+}
+.main_div{
+    margin: auto;
+    display: flex;
+    margin-left: 10px;
+    background-color: #fff;
+    padding-bottom: 40px;
+}
+div.samples {
+    width: 512px;
+    height: 512px;
+    overflow: auto;
+    border:solid;
+    border-color: #415989;
+}
+
+.myButton {
+	box-shadow:inset 0px 0px 15px 3px #23395e;
+	background:linear-gradient(to bottom, #2e466e 5%, #415989 100%);
+	background-color:#2e466e;
+	border-radius:17px;
+	border:1px solid #1f2f47;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	margin:3px 0px 0px 4px;
+    text-decoration:none;
+    height: 30px;
+	text-shadow:0px 1px 0px #263666;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #415989 5%, #2e466e 100%);
+	background-color:#415989;
+}
+.myButton:active {
+	position:relative;
+    top:1px;
+}
+.myButton:focus { outline: none; }
+/*
+.labels{
+    height: 38px;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+*/
+.btn-primary {
+    margin: 0 auto;
+    display: inline-block;
+    margin-top: 5px;
+    border: none;
+    padding: 5px;
+    margin-left: 10px;
+    /*margin-left: 10px;*/
+    /*margin-right: 10px;*/
+}
+
+#tags {
+    margin: 2px;
+}
+#random-button {
+    margin-left: 25px;
+    width: 220px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    background-color:rgb(2, 0, 245);
+    height: 50px;
+    margin-bottom: 10px;
+}
+.btn-danger{
+    margin: 0px;
+    padding 3px;
+    /*text-align:center;*/
+    /*vertical-align: middle;*/
+}
+.input{
+    margin: 0 auto;
+    display: block;
+    margin-left: 10px;
+    width: 80px;
+    height: 240px;
+}
+.sub_input{
+    border: solid;
+    border-color: #415989;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 2px;
+}
+.output{
+    width: 100%;
+    height: 512px;
+    text-align: center;
+    /*border: solid;
+    border-color: #415989;*/
+}
+.myOutput{
+    width: 620px;
+    height: 620px;
+    border: solid;
+    margin: 0 auto;
+    border-color: #415989;
+    background-color: white;
+}
+#output1{
+    width: 480px;
+    height: 480px;
+    border: solid;
+    margin: 0 auto;
+    /*margin-right: 30px;*/
+    border-color: #415989;
+    background-color: white;
+}
+
+
+
+.col {
+    padding: 10px;
+    margin: auto;
+    width: 100%;
+    height: 512px;
+    background-color: #ddd
+}
+
+#myrow {
+    background-color: #111;
+}
+
+
+#styles-picker{
+    margin-top: 30px;
+    background-color: #333;
+    /*margin-bottom: 100px;*/
+    padding: 30px;
+    overflow-x: auto;
+    display: flex;
+}
+
+#style_list{
+    display:flex;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+#style_pick{
+
+    margin: 0 auto;
+    display: block;
+    text-align: justify;
+    margin-left: 20px;
+}
+#style_text {
+    color: #FFF;
+    font-family: 'Raleway', Helvetica, Arial, sans-serif;
+    /*font-weight: ;*/
+    text-transform: uppercase;
+    display: block;
+    text-align: center;
+    background-color: #111;
+    padding: 5px;
+}
+
+#output_imgs:hover{
+    opacity: 0.5;
+}
+
+.dropdown-item:hover {
+    background-color: cyan;
+}
+.dropdown-menu {         
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+h5 {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+

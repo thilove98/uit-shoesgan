@@ -4,8 +4,11 @@ labels = ['Boat Shoes', 'Boots', 'Clogs & Mules', 'Crib Shoes', 'Flats', 'Heels'
 imgCode = {};
 NUM_OUTPUT_IMAGES = 1;
 prev_imgs = [];
+style_src = {};
 
 CLICK = false
+style_mixing = null;
+style_list = null;
 
 styles = {
     "sha": "",
@@ -25,6 +28,39 @@ function makeid(length){
     }
     return result;
 }
+
+function create_generated_output() {
+    let output_region = document.getElementById("generated_output");
+    if (output_region.innerHTML == "") {
+        console.log("hahaha");
+
+        let h5 = document.createElement("h5");
+        h5.innerHTML = "GENERATED SHOE";
+
+        let myoutput = document.createElement("div");
+        myoutput.className = "myOutput";
+
+        let mybutton = document.createElement("button");
+        mybutton.className = "btn btn-danger"
+        mybutton.onclick = btnBack();
+        
+        let arrow = document.createElement("i");
+        arrow.className = "fa fa-arrow-left";
+        mybutton.appendChild(arrow);
+
+        let samples = document.createElement("div");
+        samples.id = "samples";
+        samples.className = "output";
+        
+        myoutput.appendChild(mybutton);
+        myoutput.appendChild(samples);
+        output_region.appendChild(h5);
+        output_region.appendChild(myoutput);
+    }
+
+
+}
+
 
 function addSample(src, name=""){
     let canvas = document.getElementById("samples");
@@ -46,6 +82,11 @@ function addSample(src, name=""){
         }
         canvas.innerHTML = "";
         canvas.appendChild(tempImg);
+
+        var style_region = document.getElementById("style-region");
+        if (style_region.innerHTML == "") {
+            style_region.appendChild(style_mixing);
+        }
     }
 }
 
@@ -153,7 +194,10 @@ async function btnBack() {
         let canvas = document.getElementById("samples");
         let img = prev_imgs.pop();
         canvas.innerHTML = "";
-        canvas.appendChild(img);
+        if (img != null)
+            canvas.appendChild(img);
+        if (img == null)
+            document.getElementById("style-region").innerHTML = "";
     }
 }
 async function btnSubmit(){
@@ -207,7 +251,39 @@ function load(){
     }
 }
 
+function load2() {
+    var tags = document.getElementById("tags_type");
+    var dropdown = document.createElement("div");
+    dropdown.className = "dropdown-menu";
+    for(var i=0;i<labels.length;i++){
+        var dropdown_item = document.createElement("a");
+        dropdown_item.className = "dropdown-item";
+        dropdown_item.innerHTML = labels[i].bold();
+        dropdown_item.id = labels[i];
+        dropdown.appendChild(dropdown_item);
+        var line = document.createElement("div");
+        line.className = "dropdown-divider";
+        if (i != labels.length - 1)
+            dropdown.appendChild(line);
+        
+        dropdown_item.onclick = async function() {
+            data = await getVectorsByLabels([dropdown_item.id])
+            vectors = data.vectors;
+            for(let i = 0; i<vectors.length;i++){
+                data = await getImageByVectors([vectors[i], vectors[i], vectors[i]]);
+                name = makeid(10);
+                imgCode[name] = [vectors[i], vectors[i], vectors[i]];
+                addSample("data:image/jpeg;base64," + data.image, name);
+            }
+        }
+    }
+    tags.appendChild(dropdown);
+}
+
 function addStyle(src, name, style_name, level) {
+    let dropdown_item = document.createElement("div");
+    dropdown_item.className = "dropdown-item";
+
     let img_div = document.createElement("div");
     img_div.id = "style_pick";
     let text = document.createElement("span");
@@ -219,12 +295,13 @@ function addStyle(src, name, style_name, level) {
     img.name = name;
     img.id = "style_img";
  
-    img.width = 120;
-    img.height = 120;
+    img.width = 80;
+    img.height = 80;
     img.onload = function() {
         img_div.appendChild(text);
         img_div.appendChild(img);
-        document.getElementById("style-list").appendChild(img_div);
+        dropdown_item.appendChild(img_div);
+        style_list.appendChild(dropdown_item);
     }
 
     img.onclick = async function() {
@@ -233,11 +310,14 @@ function addStyle(src, name, style_name, level) {
         }
         CLICK = true;
         let canvas = document.getElementById("samples");
-
         for (let i=0; i<NUM_OUTPUT_IMAGES; i++) {
             let weight = (i + 1) * 3 / NUM_OUTPUT_IMAGES;
             if (canvas.hasChildNodes) {
                 input_img = canvas.childNodes[0];
+                if (input_img == null) {
+                    CLICK = false;
+                    return;
+                }
                 data = await getImageByMixing(imgCode[input_img.name], imgCode[img.name], weight, level);
                 outputImg = document.createElement("img");
                 outputImg.id = "output_imgs";
@@ -250,9 +330,9 @@ function addStyle(src, name, style_name, level) {
                 outputImg.width = size;
                 outputImg.height = size;
                 
-                outputImg.onload = function() {
-                    canvas.innerHTML = "";
-                    canvas.appendChild(outputImg);
+                outputImg.onload = async function() {
+                    addSample(this.src, this.name);
+
                 }
             }
         }
@@ -260,7 +340,18 @@ function addStyle(src, name, style_name, level) {
     }
    
 }
+
 function loadStyleList() {
+    style_mixing = document.createElement("div");
+    style_mixing.className = "dropright";
+    style_mixing.innerHTML = '<button class="btn btn-secondary dropdown-toggle" type="button" id="random-button" data-toggle="dropdown">STYLE MIXING</button>'
+    style_mixing.id = "style-mixing";
+
+    style_list = document.createElement("div");
+    style_list.className = "dropdown-menu";
+    style_list.id = "style-list";
+    style_mixing.appendChild(style_list);
+    
     style_data = getVectorsFromPredefined();
     vectors = style_data.vectors;
     styles = style_data.styles;
@@ -277,11 +368,10 @@ function loadStyleList() {
 
         });
 
-
     }
     
-}
+}   
 
-load();
-
+load2();
+create_generated_output();
 loadStyleList();
