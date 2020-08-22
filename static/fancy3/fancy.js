@@ -384,5 +384,5 @@ function loadStyleList() {
 }   
 
 load2();
-create_generated_output();
+//create_generated_output();
 loadStyleList();
