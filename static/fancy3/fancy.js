@@ -74,6 +74,7 @@ function create_generated_output() {
 
 
 function addSample(src, name=""){
+    create_generated_output();
     let canvas = document.getElementById("samples");
     let tempImg = document.createElement("img");
     tempImg.src = src;
