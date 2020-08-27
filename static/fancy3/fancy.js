@@ -323,7 +323,7 @@ function addStyle(src, name, style_name, level) {
         CLICK = true;
         let canvas = document.getElementById("samples");
         for (let i=0; i<NUM_OUTPUT_IMAGES; i++) {
-            let weight = (i + 9) * 3 / NUM_OUTPUT_IMAGES;
+            let weight = (i+1) * 3 / NUM_OUTPUT_IMAGES;
             if (canvas.hasChildNodes) {
                 input_img = canvas.childNodes[0];
                 if (input_img == null) {
