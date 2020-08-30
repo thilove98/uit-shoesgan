@@ -14,8 +14,11 @@ The [dataset](https://github.com/thilove98/uit-shoesgan/tree/master/dataset) inc
 
 ### Pretrained model
 We have trained the 512px model on our datasets (with the left-view) 420k iterations. Due to the limited of computational resources we only used 1 batch size.
-<https://drive.google.com/uc?id=1gr6ghsrPX6CsEufFZkgMbDqLQ_KwsZaq>
+T
 
 
 ### Demo
-![](shoes-demo.gif)
+We have recorded our demo on youtube
+- title: Generating shoes designs using GAN
+  link: https://youtube.com/embed/w3jLJU7DT5E
+
