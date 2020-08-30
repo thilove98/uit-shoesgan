@@ -18,7 +18,5 @@ T
 
 
 ### Demo
-We have recorded our demo on youtube
-- title: Generating shoes designs using GAN
-  link: https://youtube.com/embed/w3jLJU7DT5E
+We have recorded our demo: https://www.youtube.com/watch?v=COl8VeL-DNQ
 
